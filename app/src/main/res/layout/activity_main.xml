@@ -5,9 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/default_margin"
-    android:layout_marginEnd="@dimen/default_margin"
-    android:background="@color/background_main"
+    android:background="@color/background_main_color"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -15,33 +13,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
+
         <Button
             style="@style/StyleNavButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:backgroundTint="#525DC0"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:text="@string/button_categories">
-        </Button>
+            android:layout_marginEnd="@dimen/half_gap"
+            android:layout_weight="1"
+            android:backgroundTint="@color/background_button_blue_color"
+            android:text="@string/title_categories" />
+
         <Button
             style="@style/StyleNavButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:backgroundTint="#E13E3E"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:text="@string/button_favourites"
+            android:layout_marginStart="@dimen/half_gap"
+            android:layout_weight="1"
+            android:backgroundTint="@color/background_button_red_color"
+            android:text="@string/title_favourites"
             app:icon="@drawable/ic_heart_empty"
-            app:iconGravity="end">
-        </Button>
+            app:iconGravity="textEnd" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
