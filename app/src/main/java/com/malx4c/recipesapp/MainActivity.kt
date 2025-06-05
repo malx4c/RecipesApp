@@ -14,11 +14,10 @@ class MainActivity : AppCompatActivity() {
         get() = _binding ?: throw IllegalStateException("ActivityMainBinding is null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         _binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -30,5 +29,10 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.mainContainer, CategoriesListFragment())
             .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
