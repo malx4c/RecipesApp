@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -27,21 +29,25 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        showFragment(CategoriesListFragment())
+        supportFragmentManager.commit {
+            replace(R.id.mainContainer, CategoriesListFragment())
+        }
 
         binding.btnCategories.setOnClickListener {
-            showFragment(CategoriesListFragment())
+            showFragment(CategoriesListFragment(), "categories")
         }
 
         binding.btnFavorites.setOnClickListener {
-            showFragment(FavoritesFragment())
+            showFragment(FavoritesFragment(), "favorites")
         }
     }
 
-    private fun showFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.mainContainer, fragment)
-            .commit()
+    private fun showFragment(fragment: Fragment, name: String? = null) {
+        supportFragmentManager.commit {
+            replace(R.id.mainContainer, fragment)
+            setReorderingAllowed(true)
+            addToBackStack(name)
+        }
     }
 
     override fun onDestroy() {
