@@ -30,23 +30,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.commit {
-            replace(R.id.mainContainer, CategoriesListFragment())
+            add(R.id.mainContainer, CategoriesListFragment())
         }
 
         binding.btnCategories.setOnClickListener {
-            showFragment(CategoriesListFragment(), "categories")
+            showFragment(CategoriesListFragment())
         }
 
         binding.btnFavorites.setOnClickListener {
-            showFragment(FavoritesFragment(), "favorites")
+            showFragment(FavoritesFragment())
         }
     }
 
-    private fun showFragment(fragment: Fragment, name: String? = null) {
+    private fun showFragment(fragment: Fragment) {
         supportFragmentManager.commit {
             replace(R.id.mainContainer, fragment)
             setReorderingAllowed(true)
-            addToBackStack(name)
+            addToBackStack(null)
         }
     }
 
