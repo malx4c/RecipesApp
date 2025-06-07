@@ -5,6 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -26,9 +29,25 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.mainContainer, CategoriesListFragment())
-            .commit()
+        supportFragmentManager.commit {
+            add(R.id.mainContainer, CategoriesListFragment())
+        }
+
+        binding.btnCategories.setOnClickListener {
+            showFragment(CategoriesListFragment())
+        }
+
+        binding.btnFavorites.setOnClickListener {
+            showFragment(FavoritesFragment())
+        }
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.commit {
+            replace(R.id.mainContainer, fragment)
+            setReorderingAllowed(true)
+            addToBackStack(null)
+        }
     }
 
     override fun onDestroy() {

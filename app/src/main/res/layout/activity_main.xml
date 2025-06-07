@@ -22,11 +22,13 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             style="@style/StyleNavButton"
+            android:id="@+id/btnCategories"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/half_gap"
@@ -36,6 +38,7 @@
 
         <Button
             style="@style/StyleNavButton"
+            android:id="@+id/btnFavorites"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/half_gap"
