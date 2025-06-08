@@ -18,33 +18,33 @@
             android:layout_height="224dp">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/ivCategories"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_bcg_categories" />
+                android:src="@drawable/img_bcg_categories"
+                tools:layout_editor_absoluteX="-77dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <TextView
                 style="@style/StyleTitle20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/shape_rounded_variants"
                 android:text="@string/title_categories"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/ivCategories" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCategories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/half_default_margin"
-            android:layout_marginVertical="@dimen/half_default_margin"
+            android:layout_margin="@dimen/half_default_margin"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
             tools:itemCount="6"
-            tools:listitem="@layout/item_category" />
+            tools:listitem="@layout/item_category"
+            tools:spanCount="2" />
 
     </LinearLayout>
 
