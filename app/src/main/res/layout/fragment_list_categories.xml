@@ -1,16 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/categoriesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main_color"
-    tools:context=".CategoriesListFragment">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/title_categories" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fragment_header_height">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/ivCategories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_bcg_categories" />
+
+        <TextView
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_categories"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ivCategories" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/half_default_margin"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:itemCount="6"
+        tools:listitem="@layout/item_category"
+        tools:spanCount="2" />
+
+</LinearLayout>
+
