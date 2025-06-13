@@ -9,13 +9,12 @@
     android:layout_marginVertical="@dimen/half_default_margin"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/half_default_margin"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:layout_height="@dimen/cv_height"
-    tools:layout_width="@dimen/cv_width"
-    android:foreground="?attr/selectableItemBackground"
-    >
+    tools:layout_width="@dimen/cv_width">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,8 +23,11 @@
         <ImageView
             android:id="@+id/ivCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/image_cv_categories_height"
             android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:layout_height="@dimen/image_cv_categories_height"
             tools:src="@drawable/img_burger" />
 
