@@ -16,7 +16,7 @@
             android:id="@+id/ivCategories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/title_categories"
             android:scaleType="centerCrop"
             android:src="@drawable/img_bcg_categories" />
 
@@ -35,6 +35,7 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/half_default_margin"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
         tools:itemCount="6"
         tools:listitem="@layout/item_category"
         tools:spanCount="2" />
