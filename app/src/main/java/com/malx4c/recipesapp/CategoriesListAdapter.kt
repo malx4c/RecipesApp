@@ -25,7 +25,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: Category) {
-            binding.tvDescriptionCategories.text = category.title
+            binding.tvTitleCategories.text = category.title
             binding.tvDescriptionCategories.text = category.description
 
             val drawable = try {
