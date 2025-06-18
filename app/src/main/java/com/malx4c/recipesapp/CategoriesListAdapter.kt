@@ -11,11 +11,21 @@ import com.malx4c.recipesapp.entities.Category
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
-    class ViewHolder(private val binding: ItemCategoryBinding) :
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    private var itemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
+    inner class ViewHolder(private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: Category) {
-            binding.tvDescriptionCategories.text = category.title
+            binding.tvTitleCategories.text = category.title
             binding.tvDescriptionCategories.text = category.description
 
             val drawable = try {
@@ -28,6 +38,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
             binding.ivCategories.setImageDrawable(drawable)
 
+            itemView.setOnClickListener { itemClickListener?.onItemClick() }
         }
     }
 
