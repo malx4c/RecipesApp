@@ -12,11 +12,11 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/half_default_margin"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toTopOf="@id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -27,8 +27,8 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            style="@style/StyleNavButton"
             android:id="@+id/btnCategories"
+            style="@style/StyleNavButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/half_gap"
@@ -37,8 +37,8 @@
             android:text="@string/title_categories" />
 
         <Button
-            style="@style/StyleNavButton"
             android:id="@+id/btnFavorites"
+            style="@style/StyleNavButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/half_gap"

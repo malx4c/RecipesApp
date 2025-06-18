@@ -38,15 +38,27 @@ class CategoriesListFragment : Fragment() {
         binding.rvCategories.adapter = categoryAdapter
 
         categoryAdapter.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick() {
-                openRecipesByCategoryId()
+            override fun onItemClick(categoryId: Int) {
+                openRecipesByCategoryId(categoryId)
             }
         })
     }
 
-    private fun openRecipesByCategoryId() {
+    private fun openRecipesByCategoryId(categoryId: Int) {
+
+        val category = STUB.getCategories().find { id == categoryId }
+        val categoryName = category?.title
+        val categoryImageUrl = category?.imageUrl
+
+        val bundle = Bundle()
+        bundle.apply {
+            "ARG_CATEGORY_ID" to categoryId
+            "ARG_CATEGORY_NAME" to categoryName
+            "ARG_CATEGORY_IMAGE_URL" to categoryImageUrl
+        }
+
         parentFragmentManager.commit {
-            replace<RecipesListFragment>(R.id.mainContainer)
+            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(null)
         }
