@@ -5,7 +5,10 @@
     <dimen name="half_gap">2dp</dimen>
     <dimen name="cv_width">156dp</dimen>
     <dimen name="cv_height">220dp</dimen>
+    <dimen name="cv_recipes_width">328dp</dimen>
+    <dimen name="cv_recipes_height">132dp</dimen>
     <dimen name="image_cv_categories_height">130dp</dimen>
+    <dimen name="image_cv_recipes_height">100dp</dimen>
     <dimen name="default_padding">10dp</dimen>
     <dimen name="fragment_header_height">224dp</dimen>
 </resources>

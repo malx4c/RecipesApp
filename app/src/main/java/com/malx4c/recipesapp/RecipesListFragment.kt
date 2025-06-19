@@ -1,10 +1,14 @@
 package com.malx4c.recipesapp
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -35,6 +39,17 @@ class RecipesListFragment : Fragment() {
             categoryImageUrl = it.getString("ARG_CATEGORY_IMAGE_URL")
         }
 
+        val drawable = try {
+            Drawable.createFromStream(categoryImageUrl?.let { view.context.assets.open(it) }, null)
+        } catch (e: Exception) {
+            Log.e("!!! file open error", categoryImageUrl, e)
+            null
+        }
+
+        binding.tvRecipesTitle.text = categoryName
+        binding.ivRecipes.setImageDrawable(drawable)
+
+        initRecipes()
     }
 
     override fun onDestroyView() {
@@ -42,4 +57,22 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
+    private fun initRecipes() {
+        val recipesAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId())
+        binding.rvRecipes.adapter = recipesAdapter
+
+        recipesAdapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
+            override fun onItemClick(recipesId: Int) {
+                openRecipeByRecipeId(recipesId)
+            }
+        })
+    }
+
+    private fun openRecipeByRecipeId(recipesId: Int) {
+        parentFragmentManager.commit {
+            replace<RecipeFragment>(R.id.mainContainer)
+            setReorderingAllowed(true)
+            addToBackStack(null)
+        }
+    }
 }
