@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
+import com.malx4c.recipesapp.entities.Recipe
 
 class RecipesListFragment : Fragment() {
 
@@ -47,7 +48,10 @@ class RecipesListFragment : Fragment() {
         }
 
         binding.tvRecipesTitle.text = categoryName
-        binding.ivRecipes.setImageDrawable(drawable)
+        binding.ivRecipes.apply {
+            setImageDrawable(drawable)
+            contentDescription = categoryName
+        }
 
         initRecipes()
     }
@@ -69,8 +73,14 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipesId: Int) {
+
+        val recipe: Recipe? = STUB.getRecipeById(recipesId)
+        val bundle = Bundle().apply {
+            putParcelable("ARG_RECIPE", recipe)
+        }
+
         parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.mainContainer)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(null)
         }

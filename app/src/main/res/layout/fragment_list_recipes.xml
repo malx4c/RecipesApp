@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/img_bcg_recipes_list" />
+            android:src="@drawable/img_bcg_recipes_list"/>
 
         <TextView
             style="@style/StyleTitle20"
@@ -35,9 +35,6 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/half_default_margin"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:spanCount="1"
-        tools:itemCount="6"
-        tools:listitem="@layout/item_recipes"
-        tools:spanCount="2" />
+        app:spanCount="1"/>
 
 </LinearLayout>
