@@ -27,6 +27,11 @@
         <item name="android:textColor">@color/font_description_color</item>
     </style>
 
+    <style name="StyleDescription14" parent="StyleDescription12">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="StyleNavButton" parent="Widget.Material3.Button">
         <item name="android:textAppearance">@style/StyleTitle14</item>
         <item name="cornerRadius">@dimen/half_default_margin</item>

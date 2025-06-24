@@ -35,9 +35,9 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            categoryId = it.getInt("ARG_CATEGORY_ID")
-            categoryName = it.getString("ARG_CATEGORY_NAME")
-            categoryImageUrl = it.getString("ARG_CATEGORY_IMAGE_URL")
+            categoryId = it.getInt(ARG_CATEGORY_ID)
+            categoryName = it.getString(ARG_CATEGORY_NAME)
+            categoryImageUrl = it.getString(ARG_CATEGORY_IMAGE_URL)
         }
 
         val drawable = try {
@@ -65,6 +65,7 @@ class RecipesListFragment : Fragment() {
         val recipesAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId())
         binding.rvRecipes.adapter = recipesAdapter
 
+
         recipesAdapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
             override fun onItemClick(recipesId: Int) {
                 openRecipeByRecipeId(recipesId)
@@ -76,7 +77,7 @@ class RecipesListFragment : Fragment() {
 
         val recipe: Recipe? = STUB.getRecipeById(recipesId)
         val bundle = Bundle().apply {
-            putParcelable("ARG_RECIPE", recipe)
+            putParcelable(ARG_RECIPE, recipe)
         }
 
         parentFragmentManager.commit {
