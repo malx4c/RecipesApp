@@ -7,7 +7,6 @@ import com.malx4c.recipesapp.databinding.ItemIngredientsBinding
 import com.malx4c.recipesapp.entities.Ingredient
 import com.malx4c.recipesapp.entities.Recipe
 
-
 class IngredientsAdapter(private val recipe: Recipe) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
@@ -20,7 +19,7 @@ class IngredientsAdapter(private val recipe: Recipe) :
 
             binding.apply {
                 tvIngredientDescription.text = ingredients.description
-                tvIngredientQuantity.text = ingredients.quantity + ' ' + ingredients.unitOfMeasure
+                tvIngredientQuantity.text = "${ingredients.quantity} ${ingredients.unitOfMeasure}"
             }
         }
     }

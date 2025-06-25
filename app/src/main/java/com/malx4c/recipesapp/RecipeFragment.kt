@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
 import com.malx4c.recipesapp.entities.Recipe
+import androidx.core.graphics.toColorInt
 
 class RecipeFragment : Fragment() {
 
@@ -60,21 +61,19 @@ class RecipeFragment : Fragment() {
     private fun initRecycler() {
         val ingredientsAdapter = recipe?.let { IngredientsAdapter(it) }
         binding.rvIngredients.adapter = ingredientsAdapter
-        binding.rvIngredients.addItemDecoration(
-            DividerItemDecoration(
-                binding.rvIngredients.context,
-                LinearLayoutManager.VERTICAL
-            )
-        )
+        binding.rvIngredients.addItemDecoration(getDivider(binding.rvMethod.context))
 
         val methodAdapter = recipe?.let { MethodAdapter(it) }
         binding.rvMethod.adapter = methodAdapter
-        binding.rvMethod.addItemDecoration(
-            DividerItemDecoration(
-                binding.rvMethod.context,
-                LinearLayoutManager.VERTICAL
-            )
-        )
+        binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
+    }
+
+    private fun getDivider(context: Context): MaterialDividerItemDecoration {
+        val divider = MaterialDividerItemDecoration (context, LinearLayoutManager.VERTICAL)
+        divider.isLastItemDecorated= false
+        divider.dividerColor = DIVIDER_COLOR.toColorInt()
+
+        return divider
     }
 
     override fun onDestroyView() {
