@@ -68,13 +68,11 @@ class RecipeFragment : Fragment() {
         binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
     }
 
-    private fun getDivider(context: Context): MaterialDividerItemDecoration {
-        val divider = MaterialDividerItemDecoration (context, LinearLayoutManager.VERTICAL)
-        divider.isLastItemDecorated= false
-        divider.dividerColor = DIVIDER_COLOR.toColorInt()
-
-        return divider
-    }
+    private fun getDivider(context: Context) =
+        MaterialDividerItemDecoration(context, LinearLayoutManager.VERTICAL).apply {
+            isLastItemDecorated = false
+            dividerColor = DIVIDER_COLOR.toColorInt()
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()
