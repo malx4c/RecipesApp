@@ -51,6 +51,35 @@
                 android:layout_margin="0dp"
                 android:padding="0dp"
                 android:text="@string/title_ingredients" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/half_additional_padding">
+
+                <TextView
+                    style="@style/StyleSubTitle16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sub_title_ingredients" />
+
+                <TextView
+                    android:id="@+id/tvNumberServings"
+                    style="@style/StyleSubTitle16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_additional_padding"
+                    tools:text="3" />
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/spNumberServings"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sb_height"
+                android:layout_marginTop="@dimen/half_additional_padding"
+                android:max="4"
+                android:progress="0" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -59,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/default_margin"
             android:background="@drawable/shape_rounded_rv"
-            android:padding="@dimen/additional_padding"
+            android:paddingHorizontal="@dimen/additional_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/item_ingredients" />
@@ -78,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/default_margin"
             android:background="@drawable/shape_rounded_rv"
-            android:padding="@dimen/additional_padding"
+            android:paddingHorizontal="@dimen/additional_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/item_method" />

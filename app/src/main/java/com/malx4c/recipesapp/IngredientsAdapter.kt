@@ -11,15 +11,20 @@ class IngredientsAdapter(private val recipe: Recipe) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
     private val dataSet: List<Ingredient> = recipe.ingredients
+    private var quantity: Int = 1
 
     inner class ViewHolder(private val binding: ItemIngredientsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredients: Ingredient) {
 
+            val totalQuantity = ingredients.quantity.toFloat() * quantity
+            val formatter = if (totalQuantity % 1 == 0F) "%.0f" else "%.1f"
+
             binding.apply {
                 tvIngredientDescription.text = ingredients.description
-                tvIngredientQuantity.text = "${ingredients.quantity} ${ingredients.unitOfMeasure}"
+                tvIngredientQuantity.text =
+                    "${String.format(formatter, totalQuantity)} ${ingredients.unitOfMeasure}"
             }
         }
     }
@@ -38,4 +43,9 @@ class IngredientsAdapter(private val recipe: Recipe) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun updateIngredients(progress: Int) {
+        quantity = progress
+        notifyDataSetChanged()
+    }
 }
