@@ -10,5 +10,6 @@
     <dimen name="image_cv_categories_height">130dp</dimen>
     <dimen name="image_cv_recipes_height">100dp</dimen>
     <dimen name="default_padding">10dp</dimen>
+    <dimen name="additional_padding">12dp</dimen>
     <dimen name="fragment_header_height">224dp</dimen>
 </resources>

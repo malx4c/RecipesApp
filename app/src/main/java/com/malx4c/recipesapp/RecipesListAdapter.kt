@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemRecipesBinding
 import com.malx4c.recipesapp.entities.Recipe
 
+
 class RecipesListAdapter(private val dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
@@ -25,13 +26,13 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(recipe: Recipe) {
+
             binding.tvTitleRecipes.text = recipe.title
 
             val drawable = try {
-                val inputStream = this.itemView.context.assets.open(recipe.imageUrl)
-                Drawable.createFromStream(inputStream, null)
+                Drawable.createFromStream(recipe.imageUrl.let { this.itemView.context.assets.open(it) }, null)
             } catch (e: Exception) {
-                Log.e("fileErr", recipe.imageUrl, e)
+                Log.e("!!! image open error", recipe.imageUrl, e)
                 null
             }
 

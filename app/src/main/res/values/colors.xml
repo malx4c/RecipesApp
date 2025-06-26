@@ -8,4 +8,5 @@
     <color name="font_title_color">#5F3678</color>
     <color name="font_sub_title_color">#5F3678</color>
     <color name="font_description_color">#666666</color>
+    <color name="divider_rv_item_color">#F5F5F5</color>
 </resources>

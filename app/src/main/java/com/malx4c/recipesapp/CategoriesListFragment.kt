@@ -51,9 +51,9 @@ class CategoriesListFragment : Fragment() {
         val categoryImageUrl = category?.imageUrl
 
         val bundle = Bundle().apply {
-            putInt("ARG_CATEGORY_ID", categoryId)
-            putString("ARG_CATEGORY_NAME", categoryName)
-            putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+            putInt(ARG_CATEGORY_ID, categoryId)
+            putString(ARG_CATEGORY_NAME, categoryName)
+            putString(ARG_CATEGORY_IMAGE_URL, categoryImageUrl)
         }
 
         parentFragmentManager.commit{
