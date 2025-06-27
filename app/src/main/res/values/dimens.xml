@@ -3,6 +3,7 @@
     <dimen name="default_margin">16dp</dimen>
     <dimen name="half_default_margin">8dp</dimen>
     <dimen name="half_gap">2dp</dimen>
+    <dimen name="gap">4dp</dimen>
     <dimen name="cv_width">156dp</dimen>
     <dimen name="cv_height">220dp</dimen>
     <dimen name="cv_recipes_width">328dp</dimen>
