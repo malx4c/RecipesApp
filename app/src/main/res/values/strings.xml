@@ -3,5 +3,6 @@
     <string name="title_categories">Категории</string>
     <string name="title_favourites">Избранное</string>
     <string name="title_ingredients">Ингредиенты</string>
+    <string name="sub_title_ingredients">Порций:</string>
     <string name="title_method">Способ приготовления</string>
 </resources>

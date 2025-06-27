@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
 import com.malx4c.recipesapp.entities.Recipe
-import androidx.core.graphics.toColorInt
 
 class RecipeFragment : Fragment() {
 
@@ -56,6 +57,7 @@ class RecipeFragment : Fragment() {
 
         binding.ivRecipe.setImageDrawable(drawable)
         binding.tvRecipeTitle.text = recipe?.title
+        updateNumberServings()
     }
 
     private fun initRecycler() {
@@ -66,12 +68,30 @@ class RecipeFragment : Fragment() {
         val methodAdapter = recipe?.let { MethodAdapter(it) }
         binding.rvMethod.adapter = methodAdapter
         binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
+
+        binding.spNumberServings.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                ingredientsAdapter?.updateIngredients(progress + 1)
+                updateNumberServings(progress + 1)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+    }
+
+    private fun updateNumberServings(numberServings: Int = 1) {
+        binding.tvNumberServings.text = numberServings.toString()
     }
 
     private fun getDivider(context: Context) =
         MaterialDividerItemDecoration(context, LinearLayoutManager.VERTICAL).apply {
             isLastItemDecorated = false
-            dividerColor = DIVIDER_COLOR.toColorInt()
+            dividerColor = ContextCompat.getColor(context, R.color.divider_rv_item_color)
         }
 
     override fun onDestroyView() {
