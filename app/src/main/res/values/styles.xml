@@ -44,5 +44,9 @@
         <item name="cornerRadius">@dimen/half_default_margin</item>
     </style>
 
-</resources>
+    <style name="styleSeekBar" parent="TextAppearance.AppCompat">
+        <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
+        <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
+    </style>
 
+</resources>

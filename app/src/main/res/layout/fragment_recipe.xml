@@ -55,8 +55,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/half_additional_padding">
+                android:layout_marginTop="@dimen/half_additional_padding"
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/StyleSubTitle16"
@@ -74,12 +74,16 @@
             </LinearLayout>
 
             <SeekBar
-                android:id="@+id/spNumberServings"
+                android:id="@+id/sbNumberServings"
+                style="@style/styleSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sb_height"
                 android:layout_marginTop="@dimen/half_additional_padding"
-                android:max="4"
-                android:progress="0" />
+                android:max="5"
+                android:min="1"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:progress="1" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -89,6 +93,7 @@
             android:layout_marginHorizontal="@dimen/default_margin"
             android:background="@drawable/shape_rounded_rv"
             android:paddingHorizontal="@dimen/additional_padding"
+            android:paddingVertical="@dimen/gap"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/item_ingredients" />
@@ -108,6 +113,7 @@
             android:layout_marginHorizontal="@dimen/default_margin"
             android:background="@drawable/shape_rounded_rv"
             android:paddingHorizontal="@dimen/additional_padding"
+            android:paddingVertical="@dimen/gap"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/item_method" />

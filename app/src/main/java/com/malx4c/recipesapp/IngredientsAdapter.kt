@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemIngredientsBinding
 import com.malx4c.recipesapp.entities.Ingredient
 import com.malx4c.recipesapp.entities.Recipe
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class IngredientsAdapter(private val recipe: Recipe) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
@@ -16,15 +18,17 @@ class IngredientsAdapter(private val recipe: Recipe) :
     inner class ViewHolder(private val binding: ItemIngredientsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(ingredients: Ingredient) {
+        fun bind(ingredient: Ingredient) {
 
-            val totalQuantity = ingredients.quantity.toFloat() * quantity
-            val formatter = if (totalQuantity % 1 == 0F) "%.0f" else "%.1f"
+            val totalQuantity = BigDecimal(ingredient.quantity)
+                .multiply(BigDecimal(quantity))
+                .setScale(1, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString()
 
             binding.apply {
-                tvIngredientDescription.text = ingredients.description
-                tvIngredientQuantity.text =
-                    "${String.format(formatter, totalQuantity)} ${ingredients.unitOfMeasure}"
+                tvIngredientDescription.text = ingredient.description
+                tvIngredientQuantity.text ="$totalQuantity ${ingredient.unitOfMeasure}"
             }
         }
     }

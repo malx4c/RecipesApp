@@ -69,11 +69,11 @@ class RecipeFragment : Fragment() {
         binding.rvMethod.adapter = methodAdapter
         binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
 
-        binding.spNumberServings.setOnSeekBarChangeListener(object :
+        binding.sbNumberServings.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                ingredientsAdapter?.updateIngredients(progress + 1)
-                updateNumberServings(progress + 1)
+                ingredientsAdapter?.updateIngredients(progress)
+                updateNumberServings(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
