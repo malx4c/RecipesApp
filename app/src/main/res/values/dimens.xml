@@ -15,4 +15,5 @@
     <dimen name="half_additional_padding">6dp</dimen>
     <dimen name="fragment_header_height">224dp</dimen>
     <dimen name="sb_height">30dp</dimen>
+    <dimen name="image_favorite_ic_size">40dp</dimen>
 </resources>
