@@ -57,6 +57,8 @@ class RecipeFragment : Fragment() {
 
         binding.ivRecipe.setImageDrawable(drawable)
         binding.tvRecipeTitle.text = recipe?.title
+        binding.btnSetFavorites.setImageResource(R.drawable.ic_heart_empty)
+        binding.btnSetFavorites.setOnClickListener { binding.btnSetFavorites.setImageResource(R.drawable.ic_heart) }
         updateNumberServings()
     }
 

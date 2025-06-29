@@ -35,6 +35,21 @@
                 app:layout_constraintStart_toStartOf="@+id/ivRecipe"
                 tools:text="рецепты" />
 
+            <ImageButton
+                android:id="@+id/btnSetFavorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/title_favourites"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                tools:src="@drawable/ic_heart" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
