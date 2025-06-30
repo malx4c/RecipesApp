@@ -103,7 +103,7 @@ class RecipeFragment : Fragment() {
 
     private fun updateFavoritesImage() {
         val imageFavoritesId: Int =
-            if (recipe?.isFavorites() == true) R.drawable.ic_heart else R.drawable.ic_heart_empty
+            if (getFavorites().contains(recipe?.id.toString())) R.drawable.ic_heart else R.drawable.ic_heart_empty
         binding.btnSetFavorites.setImageResource(imageFavoritesId)
     }
 
@@ -114,17 +114,14 @@ class RecipeFragment : Fragment() {
     }
 
     private fun setFavorites() {
+        val recipeId = recipe?.id ?: return
         val favorites = getFavorites()
-        val recipeId = recipe?.id.toString()
 
-        if (!favorites.add(recipeId)) favorites.remove(recipeId)
+        if (favorites.contains(recipeId.toString()))
+            favorites.remove(recipeId.toString()) else favorites.add(recipeId.toString())
 
         saveFavorites(favorites)
         updateFavoritesImage()
-    }
-
-    private fun Recipe.isFavorites(): Boolean {
-        return getFavorites().contains(id.toString())
     }
 
     private fun getDivider(context: Context) =
