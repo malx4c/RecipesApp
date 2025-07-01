@@ -103,7 +103,7 @@ class RecipeFragment : Fragment() {
 
     private fun updateFavoritesImage() {
         val imageFavoritesId: Int =
-            if (getFavorites().contains(recipe?.id.toString())) R.drawable.ic_heart else R.drawable.ic_heart_empty
+            if (getFavorites().contains(recipe?.id?.toString())) R.drawable.ic_heart else R.drawable.ic_heart_empty
         binding.btnSetFavorites.setImageResource(imageFavoritesId)
     }
 
