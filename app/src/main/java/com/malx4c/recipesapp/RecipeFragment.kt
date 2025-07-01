@@ -1,6 +1,7 @@
 package com.malx4c.recipesapp
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -17,8 +18,8 @@ import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
 import com.malx4c.recipesapp.entities.Recipe
 
 class RecipeFragment : Fragment() {
-
     private var recipe: Recipe? = null
+    private var prefs: SharedPreferences? = null
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("FragmentRecipeBinding is null")
@@ -28,6 +29,7 @@ class RecipeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        prefs = activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         _binding = FragmentRecipeBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -57,8 +59,9 @@ class RecipeFragment : Fragment() {
 
         binding.ivRecipe.setImageDrawable(drawable)
         binding.tvRecipeTitle.text = recipe?.title
-        binding.btnSetFavorites.setImageResource(R.drawable.ic_heart_empty)
-        binding.btnSetFavorites.setOnClickListener { binding.btnSetFavorites.setImageResource(R.drawable.ic_heart) }
+        binding.btnSetFavorites.setOnClickListener { setFavorites() }
+
+        updateFavoritesImage()
         updateNumberServings()
     }
 
@@ -86,8 +89,39 @@ class RecipeFragment : Fragment() {
         })
     }
 
+    private fun saveFavorites(favorites: MutableSet<String>) {
+        val prefsEditor = prefs?.edit()
+        prefsEditor?.let {
+            it.putStringSet(PREFS_KEY_FAVORITES, favorites)
+            it.apply()
+        }
+    }
+
     private fun updateNumberServings(numberServings: Int = 1) {
         binding.tvNumberServings.text = numberServings.toString()
+    }
+
+    private fun updateFavoritesImage() {
+        val imageFavoritesId: Int =
+            if (getFavorites().contains(recipe?.id.toString())) R.drawable.ic_heart else R.drawable.ic_heart_empty
+        binding.btnSetFavorites.setImageResource(imageFavoritesId)
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val favoritesList: Set<String>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
+
+        return HashSet(favoritesList ?: emptySet())
+    }
+
+    private fun setFavorites() {
+        val recipeId = recipe?.id ?: return
+        val favorites = getFavorites()
+
+        if (favorites.contains(recipeId.toString()))
+            favorites.remove(recipeId.toString()) else favorites.add(recipeId.toString())
+
+        saveFavorites(favorites)
+        updateFavoritesImage()
     }
 
     private fun getDivider(context: Context) =
