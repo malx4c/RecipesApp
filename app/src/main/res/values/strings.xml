@@ -2,6 +2,7 @@
     <string name="app_name">RecipesApp</string>
     <string name="title_categories">Категории</string>
     <string name="title_favourites">Избранное</string>
+    <string name="title_empty_favorites">Вы еще не добавили ни одного рецепта в избранное</string>
     <string name="title_ingredients">Ингредиенты</string>
     <string name="sub_title_ingredients">Порций:</string>
     <string name="title_method">Способ приготовления</string>
