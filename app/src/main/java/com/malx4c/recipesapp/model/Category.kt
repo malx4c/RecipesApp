@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp.entities
+package com.malx4c.recipesapp.model
 
 data class Category(
     val id: Int,

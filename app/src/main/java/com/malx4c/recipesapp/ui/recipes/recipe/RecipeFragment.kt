@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui.recipes.recipe
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -14,8 +14,14 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.malx4c.recipesapp.ARG_RECIPE
+import com.malx4c.recipesapp.ui.IngredientsAdapter
+import com.malx4c.recipesapp.ui.MethodAdapter
+import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
+import com.malx4c.recipesapp.PREFS_NAME
+import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
-import com.malx4c.recipesapp.entities.Recipe
+import com.malx4c.recipesapp.model.Recipe
 
 class RecipeFragment : Fragment() {
     private var recipe: Recipe? = null

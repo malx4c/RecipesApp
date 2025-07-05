@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui.categories
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.malx4c.recipesapp.ARG_CATEGORY_ID
+import com.malx4c.recipesapp.ARG_CATEGORY_IMAGE_URL
+import com.malx4c.recipesapp.ARG_CATEGORY_NAME
+import com.malx4c.recipesapp.R
+import com.malx4c.recipesapp.data.STUB
 import com.malx4c.recipesapp.databinding.FragmentListCategoriesBinding
+import com.malx4c.recipesapp.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null

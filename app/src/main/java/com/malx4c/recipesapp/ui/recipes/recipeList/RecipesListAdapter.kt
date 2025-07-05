@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui.recipes.recipeList
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemRecipesBinding
-import com.malx4c.recipesapp.entities.Recipe
+import com.malx4c.recipesapp.model.Recipe
 
 
 class RecipesListAdapter(private val dataSet: List<Recipe>) :

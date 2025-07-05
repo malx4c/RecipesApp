@@ -1,11 +1,11 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemIngredientsBinding
-import com.malx4c.recipesapp.entities.Ingredient
-import com.malx4c.recipesapp.entities.Recipe
+import com.malx4c.recipesapp.model.Ingredient
+import com.malx4c.recipesapp.model.Recipe
 import java.math.BigDecimal
 import java.math.RoundingMode
 

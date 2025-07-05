@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui.recipes.favorites
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,8 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.malx4c.recipesapp.ARG_RECIPE
+import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
+import com.malx4c.recipesapp.PREFS_NAME
+import com.malx4c.recipesapp.R
+import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
+import com.malx4c.recipesapp.ui.recipes.recipeList.RecipesListAdapter
+import com.malx4c.recipesapp.data.STUB
 import com.malx4c.recipesapp.databinding.FragmentFavoritesBinding
-import com.malx4c.recipesapp.entities.Recipe
+import com.malx4c.recipesapp.model.Recipe
 
 class FavoritesFragment : Fragment() {
     private var prefs: SharedPreferences? = null
