@@ -12,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.malx4c.recipesapp.ARG_RECIPE
@@ -24,6 +26,7 @@ import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
 import com.malx4c.recipesapp.model.Recipe
 
 class RecipeFragment : Fragment() {
+    private val recipeViewModel: RecipeViewModel by viewModels()
     private var recipe: Recipe? = null
     private var prefs: SharedPreferences? = null
     private var _binding: FragmentRecipeBinding? = null
@@ -42,6 +45,12 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val recipeObserver = Observer<RecipeViewModel.RecipeUiState> {
+            Log.i("!!!! onViewCreated", it.isFavorites.toString())
+        }
+
+        recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)
 
         initUI(view)
         initRecycler()
