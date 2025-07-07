@@ -1,8 +1,8 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.data
 
-import com.malx4c.recipesapp.entities.Category
-import com.malx4c.recipesapp.entities.Ingredient
-import com.malx4c.recipesapp.entities.Recipe
+import com.malx4c.recipesapp.model.Category
+import com.malx4c.recipesapp.model.Ingredient
+import com.malx4c.recipesapp.model.Recipe
 
 object STUB {
     private val categories: List<Category> = listOf(

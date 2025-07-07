@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp.entities
+package com.malx4c.recipesapp.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

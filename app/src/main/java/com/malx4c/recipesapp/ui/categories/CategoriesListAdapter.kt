@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui.categories
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemCategoryBinding
-import com.malx4c.recipesapp.entities.Category
+import com.malx4c.recipesapp.model.Category
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.malx4c.recipesapp
+package com.malx4c.recipesapp.ui.recipes.recipeList
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,8 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.malx4c.recipesapp.ARG_CATEGORY_ID
+import com.malx4c.recipesapp.ARG_CATEGORY_IMAGE_URL
+import com.malx4c.recipesapp.ARG_CATEGORY_NAME
+import com.malx4c.recipesapp.ARG_RECIPE
+import com.malx4c.recipesapp.R
+import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
+import com.malx4c.recipesapp.data.STUB
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
-import com.malx4c.recipesapp.entities.Recipe
+import com.malx4c.recipesapp.model.Recipe
 
 class RecipesListFragment : Fragment() {
 
