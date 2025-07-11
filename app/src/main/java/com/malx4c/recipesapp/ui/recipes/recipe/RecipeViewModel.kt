@@ -2,6 +2,8 @@ package com.malx4c.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +20,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val portionsCount: Int = 1,
         var isFavorites: Boolean = false,
         val recipe: Recipe? = null,
+        val recipeImage: Drawable? = null
     )
 
     private var _recipeState = MutableLiveData(RecipeUiState())
@@ -26,19 +29,29 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     /* TODO load from network*/
     fun loadRecipe(recipesId: Int) {
-        _recipeState.value = _recipeState.value?.copy(
+        val recipe = STUB.getRecipeById(recipesId)
+        val context = getApplication<Application>().applicationContext
+
+        val recipeImage = try {
+            Drawable.createFromStream(recipe?.imageUrl?.let { context.assets.open(it) }, null)
+        } catch (e: Exception) {
+            Log.e("!!! image open error", recipe?.imageUrl, e)
+            null
+        }
+        _recipeState.value = recipeState.value?.copy(
             isFavorites = getFavorites().contains(recipesId.toString()),
-            recipe = STUB.getRecipeById(recipesId)
+            recipe = recipe,
+            recipeImage = recipeImage
         )
     }
 
     fun onFavoritesClicked() {
-        val current: Boolean = _recipeState.value?.isFavorites ?: false
-        _recipeState.value = _recipeState.value?.copy(
+        val current: Boolean = recipeState.value?.isFavorites ?: false
+        _recipeState.value = recipeState.value?.copy(
             isFavorites = !current
         )
 
-        val recipeId = _recipeState.value?.recipe?.id
+        val recipeId = recipeState.value?.recipe?.id
         val favorites = getFavorites()
 
         if (favorites.contains(recipeId.toString()))
