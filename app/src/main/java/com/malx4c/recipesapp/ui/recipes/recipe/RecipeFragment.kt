@@ -3,7 +3,6 @@ package com.malx4c.recipesapp.ui.recipes.recipe
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,10 +15,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.malx4c.recipesapp.ARG_RECIPE
+import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.ui.IngredientsAdapter
 import com.malx4c.recipesapp.ui.MethodAdapter
-import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
 import com.malx4c.recipesapp.PREFS_NAME
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
@@ -46,37 +44,34 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipeObserver = Observer<RecipeViewModel.RecipeUiState> {
-            Log.i("!!!! onViewCreated", it.isFavorites.toString())
-        }
-
-        recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)
-
         initUI(view)
         initRecycler()
     }
 
     private fun initUI(view: View) {
-        arguments?.let {
-            recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(ARG_RECIPE, Recipe::class.java)
-            } else {
-                it.getParcelable(ARG_RECIPE)
+        val recipesId: Int? = arguments?.getInt(ARG_RECIPE_ID)
+        recipesId?.let { recipeViewModel.loadRecipe(it) }
+
+        val recipeObserver = Observer<RecipeViewModel.RecipeUiState> {
+            binding.tvRecipeTitle.text = it.recipe?.title
+            val imageFavoritesId: Int =
+                if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
+            binding.btnSetFavorites.setImageResource(imageFavoritesId)
+
+            val drawable = try {
+                Drawable.createFromStream(it.recipe?.imageUrl?.let { view.context.assets.open(it) }, null)
+            } catch (e: Exception) {
+                Log.e("!!! image open error", it.recipe?.imageUrl, e)
+                null
             }
+            binding.ivRecipe.setImageDrawable(drawable)
+
+            recipe = it.recipe
+            initRecycler()
         }
 
-        val drawable = try {
-            Drawable.createFromStream(recipe?.imageUrl?.let { view.context.assets.open(it) }, null)
-        } catch (e: Exception) {
-            Log.e("!!! image open error", recipe?.imageUrl, e)
-            null
-        }
-
-        binding.ivRecipe.setImageDrawable(drawable)
-        binding.tvRecipeTitle.text = recipe?.title
-        binding.btnSetFavorites.setOnClickListener { setFavorites() }
-
-        updateFavoritesImage()
+        recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)
+        binding.btnSetFavorites.setOnClickListener { recipeViewModel.onFavoritesClicked() }
         updateNumberServings()
     }
 
@@ -104,39 +99,8 @@ class RecipeFragment : Fragment() {
         })
     }
 
-    private fun saveFavorites(favorites: MutableSet<String>) {
-        val prefsEditor = prefs?.edit()
-        prefsEditor?.let {
-            it.putStringSet(PREFS_KEY_FAVORITES, favorites)
-            it.apply()
-        }
-    }
-
     private fun updateNumberServings(numberServings: Int = 1) {
         binding.tvNumberServings.text = numberServings.toString()
-    }
-
-    private fun updateFavoritesImage() {
-        val imageFavoritesId: Int =
-            if (getFavorites().contains(recipe?.id?.toString())) R.drawable.ic_heart else R.drawable.ic_heart_empty
-        binding.btnSetFavorites.setImageResource(imageFavoritesId)
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        val favoritesList: Set<String>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
-
-        return HashSet(favoritesList ?: emptySet())
-    }
-
-    private fun setFavorites() {
-        val recipeId = recipe?.id ?: return
-        val favorites = getFavorites()
-
-        if (favorites.contains(recipeId.toString()))
-            favorites.remove(recipeId.toString()) else favorites.add(recipeId.toString())
-
-        saveFavorites(favorites)
-        updateFavoritesImage()
     }
 
     private fun getDivider(context: Context) =

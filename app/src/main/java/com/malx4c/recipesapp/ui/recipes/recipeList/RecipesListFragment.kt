@@ -12,12 +12,11 @@ import androidx.fragment.app.replace
 import com.malx4c.recipesapp.ARG_CATEGORY_ID
 import com.malx4c.recipesapp.ARG_CATEGORY_IMAGE_URL
 import com.malx4c.recipesapp.ARG_CATEGORY_NAME
-import com.malx4c.recipesapp.ARG_RECIPE
+import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.malx4c.recipesapp.data.STUB
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
-import com.malx4c.recipesapp.model.Recipe
 
 class RecipesListFragment : Fragment() {
 
@@ -81,10 +80,8 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipesId: Int) {
-
-        val recipe: Recipe? = STUB.getRecipeById(recipesId)
         val bundle = Bundle().apply {
-            putParcelable(ARG_RECIPE, recipe)
+            putInt(ARG_RECIPE_ID, recipesId)
         }
 
         parentFragmentManager.commit {
