@@ -1,10 +1,7 @@
 package com.malx4c.recipesapp.ui.recipes.recipe
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +15,6 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.ui.IngredientsAdapter
 import com.malx4c.recipesapp.ui.MethodAdapter
-import com.malx4c.recipesapp.PREFS_NAME
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
 import com.malx4c.recipesapp.model.Recipe
@@ -26,7 +22,6 @@ import com.malx4c.recipesapp.model.Recipe
 class RecipeFragment : Fragment() {
     private val recipeViewModel: RecipeViewModel by viewModels()
     private var recipe: Recipe? = null
-    private var prefs: SharedPreferences? = null
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("FragmentRecipeBinding is null")
@@ -36,7 +31,6 @@ class RecipeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        prefs = activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         _binding = FragmentRecipeBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -44,11 +38,11 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initUI(view)
+        initUI()
         initRecycler()
     }
 
-    private fun initUI(view: View) {
+    private fun initUI() {
         val recipesId: Int? = arguments?.getInt(ARG_RECIPE_ID)
         recipesId?.let { recipeViewModel.loadRecipe(it) }
 
@@ -57,15 +51,7 @@ class RecipeFragment : Fragment() {
             val imageFavoritesId: Int =
                 if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.btnSetFavorites.setImageResource(imageFavoritesId)
-
-            val drawable = try {
-                Drawable.createFromStream(it.recipe?.imageUrl?.let { view.context.assets.open(it) }, null)
-            } catch (e: Exception) {
-                Log.e("!!! image open error", it.recipe?.imageUrl, e)
-                null
-            }
-            binding.ivRecipe.setImageDrawable(drawable)
-
+            binding.ivRecipe.setImageDrawable(it.recipeImage)
             recipe = it.recipe
             initRecycler()
         }
