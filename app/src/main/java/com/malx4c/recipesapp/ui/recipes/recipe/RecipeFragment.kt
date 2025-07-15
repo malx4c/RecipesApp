@@ -17,11 +17,9 @@ import com.malx4c.recipesapp.ui.IngredientsAdapter
 import com.malx4c.recipesapp.ui.MethodAdapter
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
-import com.malx4c.recipesapp.model.Recipe
 
 class RecipeFragment : Fragment() {
     private val recipeViewModel: RecipeViewModel by viewModels()
-    private var recipe: Recipe? = null
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("FragmentRecipeBinding is null")
@@ -39,7 +37,6 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initUI()
-        initRecycler()
     }
 
     private fun initUI() {
@@ -52,41 +49,35 @@ class RecipeFragment : Fragment() {
                 if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.btnSetFavorites.setImageResource(imageFavoritesId)
             binding.ivRecipe.setImageDrawable(it.recipeImage)
-            recipe = it.recipe
-            initRecycler()
+
+            val ingredientsAdapter = it.recipe?.let { IngredientsAdapter(it) }
+            ingredientsAdapter?.updateIngredients(it.portionsCount)
+            binding.rvIngredients.adapter = ingredientsAdapter
+            binding.rvIngredients.addItemDecoration(getDivider(binding.rvMethod.context))
+
+            val methodAdapter = it.recipe?.let { MethodAdapter(it) }
+            binding.rvMethod.adapter = methodAdapter
+            binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
+            binding.tvNumberServings.text = it.portionsCount.toString()
+
+            binding.sbNumberServings.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    ingredientsAdapter?.updateIngredients(progress)
+                    recipeViewModel.updateNumberPortions(progress)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
         }
 
         recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)
         binding.btnSetFavorites.setOnClickListener { recipeViewModel.onFavoritesClicked() }
-        updateNumberServings()
-    }
-
-    private fun initRecycler() {
-        val ingredientsAdapter = recipe?.let { IngredientsAdapter(it) }
-        binding.rvIngredients.adapter = ingredientsAdapter
-        binding.rvIngredients.addItemDecoration(getDivider(binding.rvMethod.context))
-
-        val methodAdapter = recipe?.let { MethodAdapter(it) }
-        binding.rvMethod.adapter = methodAdapter
-        binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
-
-        binding.sbNumberServings.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                ingredientsAdapter?.updateIngredients(progress)
-                updateNumberServings(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-    }
-
-    private fun updateNumberServings(numberServings: Int = 1) {
-        binding.tvNumberServings.text = numberServings.toString()
     }
 
     private fun getDivider(context: Context) =

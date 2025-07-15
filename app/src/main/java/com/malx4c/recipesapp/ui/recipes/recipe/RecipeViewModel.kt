@@ -38,6 +38,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             Log.e("!!! image open error", recipe?.imageUrl, e)
             null
         }
+
         _recipeState.value = recipeState.value?.copy(
             isFavorites = getFavorites().contains(recipesId.toString()),
             recipe = recipe,
@@ -58,6 +59,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             favorites.remove(recipeId.toString()) else favorites.add(recipeId.toString())
 
         saveFavorites(favorites)
+    }
+
+    fun updateNumberPortions(portionsCount: Int = 1) {
+        _recipeState.value = recipeState.value?.copy(
+            portionsCount = portionsCount
+        )
     }
 
     private fun saveFavorites(favorites: MutableSet<String>) {
