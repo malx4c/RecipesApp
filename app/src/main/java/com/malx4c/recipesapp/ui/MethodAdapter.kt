@@ -9,7 +9,7 @@ import com.malx4c.recipesapp.model.Recipe
 class MethodAdapter(private val recipe: Recipe) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
-    private val dataSet: List<String> = recipe.method
+    var dataSet: List<String> = recipe.method
 
     inner class ViewHolder(private val binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {

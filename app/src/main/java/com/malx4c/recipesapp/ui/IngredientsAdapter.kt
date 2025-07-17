@@ -12,7 +12,7 @@ import java.math.RoundingMode
 class IngredientsAdapter(private val recipe: Recipe) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    private val dataSet: List<Ingredient> = recipe.ingredients
+    var dataSet: List<Ingredient> = recipe.ingredients
     private var quantity: Int = 1
 
     inner class ViewHolder(private val binding: ItemIngredientsBinding) :
@@ -28,7 +28,7 @@ class IngredientsAdapter(private val recipe: Recipe) :
 
             binding.apply {
                 tvIngredientDescription.text = ingredient.description
-                tvIngredientQuantity.text ="$totalQuantity ${ingredient.unitOfMeasure}"
+                tvIngredientQuantity.text = "$totalQuantity ${ingredient.unitOfMeasure}"
             }
         }
     }
