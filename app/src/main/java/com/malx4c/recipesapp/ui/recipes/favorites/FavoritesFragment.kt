@@ -9,17 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.malx4c.recipesapp.ARG_RECIPE
-import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
+import androidx.fragment.app.viewModels
+import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.PREFS_NAME
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.malx4c.recipesapp.ui.recipes.recipeList.RecipesListAdapter
-import com.malx4c.recipesapp.data.STUB
 import com.malx4c.recipesapp.databinding.FragmentFavoritesBinding
 import com.malx4c.recipesapp.model.Recipe
 
 class FavoritesFragment : Fragment() {
+
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
     private var prefs: SharedPreferences? = null
     private var _binding: FragmentFavoritesBinding? = null
     private val binding
@@ -41,34 +42,29 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val recipesIds: Set<Int> = getFavorites().map{it.toInt()}.toSet()
 
-        if (recipesIds.isEmpty()) {
+        val recipesFavorites: List<Recipe>? = favoritesViewModel.favoritesState.value?.recipes
+
+        if (recipesFavorites?.isEmpty() == true) {
             binding.tvTitleEmptyFavorites.visibility = View.VISIBLE
             return
         }
 
-        val recipesAdapter = RecipesListAdapter(STUB.getRecipesByIds(recipesIds))
+        val recipesAdapter = recipesFavorites?.let {
+            RecipesListAdapter(it)
+        }
         binding.rvRecipes.adapter = recipesAdapter
 
-        recipesAdapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
+        recipesAdapter?.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
             override fun onItemClick(recipesId: Int) {
                 openRecipeByRecipeId(recipesId)
             }
         })
     }
 
-    private fun getFavorites(): MutableSet<String> {
-        val favoritesList: Set<String>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
-
-        return HashSet(favoritesList ?: emptySet())
-    }
-
     private fun openRecipeByRecipeId(recipesId: Int) {
-
-        val recipe: Recipe? = STUB.getRecipeById(recipesId)
         val bundle = Bundle().apply {
-            putParcelable(ARG_RECIPE, recipe)
+            putInt(ARG_RECIPE_ID, recipesId)
         }
 
         parentFragmentManager.commit {
@@ -77,6 +73,7 @@ class FavoritesFragment : Fragment() {
             addToBackStack(null)
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
