@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemRecipesBinding
 import com.malx4c.recipesapp.model.Recipe
 
-
-class RecipesListAdapter(private val dataSet: List<Recipe>) :
+class RecipesListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -20,6 +19,10 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
+    }
+
+    fun update( _dataSet: List<Recipe>) {
+        dataSet = _dataSet
     }
 
     inner class ViewHolder(private val binding: ItemRecipesBinding) :

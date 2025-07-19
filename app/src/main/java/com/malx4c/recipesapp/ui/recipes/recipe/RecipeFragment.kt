@@ -1,7 +1,9 @@
 package com.malx4c.recipesapp.ui.recipes.recipe
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +73,7 @@ class RecipeFragment : Fragment() {
             val imageFavoritesId: Int =
                 if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.btnSetFavorites.setImageResource(imageFavoritesId)
-            binding.ivRecipe.setImageDrawable(it.recipeImage)
+            binding.ivRecipe.setImageDrawable(getRecipeImage(it.recipeImageUrl))
             binding.tvNumberServings.text = it.portionsCount.toString()
 
             binding.sbNumberServings.setOnSeekBarChangeListener(
@@ -84,6 +86,20 @@ class RecipeFragment : Fragment() {
 
         recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)
         binding.btnSetFavorites.setOnClickListener { recipeViewModel.onFavoritesClicked() }
+    }
+
+    private fun getRecipeImage(recipeImageUrl: String?): Drawable? {
+        val drawable = try {
+            Drawable.createFromStream(
+                recipeImageUrl?.let { view?.context?.assets?.open(it) },
+                null
+            )
+        } catch (e: Exception) {
+            Log.e("!!! file open error", recipeImageUrl, e)
+            null
+        }
+
+        return drawable
     }
 
     private fun getDivider(context: Context) =
