@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.PREFS_NAME
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.malx4c.recipesapp.ui.recipes.recipeList.RecipesListAdapter
 import com.malx4c.recipesapp.databinding.FragmentFavoritesBinding
-import com.malx4c.recipesapp.model.Recipe
 
 class FavoritesFragment : Fragment() {
 
@@ -42,24 +42,27 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initRecycler() {
-
-        val recipesFavorites: List<Recipe>? = favoritesViewModel.favoritesState.value?.recipes
-
-        if (recipesFavorites?.isEmpty() == true) {
-            binding.tvTitleEmptyFavorites.visibility = View.VISIBLE
-            return
-        }
-
-        val recipesAdapter = recipesFavorites?.let {
-            RecipesListAdapter(it)
-        }
+        val recipesAdapter = RecipesListAdapter(emptyList())
         binding.rvRecipes.adapter = recipesAdapter
 
-        recipesAdapter?.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
-            override fun onItemClick(recipesId: Int) {
-                openRecipeByRecipeId(recipesId)
+        val favoritesObserver = Observer<FavoritesViewModel.FavoritesUiState> {
+            if (it.recipes?.isEmpty() == true) {
+                binding.tvTitleEmptyFavorites.visibility = View.VISIBLE
+            } else {
+                it.recipes?.let { recipesAdapter.update(it) }
+                recipesAdapter.setOnItemClickListener(object :
+                    RecipesListAdapter.OnItemClickListener {
+                    override fun onItemClick(recipesId: Int) {
+                        openRecipeByRecipeId(recipesId)
+                    }
+                })
             }
-        })
+        }
+
+        favoritesViewModel.favoritesState.observe(
+            viewLifecycleOwner,
+            favoritesObserver
+        )
     }
 
     private fun openRecipeByRecipeId(recipesId: Int) {

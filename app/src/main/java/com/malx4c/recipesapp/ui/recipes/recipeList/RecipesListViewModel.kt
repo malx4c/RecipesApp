@@ -1,9 +1,7 @@
 package com.malx4c.recipesapp.ui.recipes.recipeList
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +17,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     data class RecipesListUiState(
         val categoryId: Int? = null,
         val categoryName: String? = null,
-        val categoryImage: Drawable? = null,
+        val categoryImageUrl: String? = null,
         var recipes: List<Recipe>? = emptyList()
     )
 
@@ -32,22 +30,10 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             _recipesListState.value = RecipesListUiState(
                 categoryId = it.getInt(ARG_CATEGORY_ID),
                 categoryName = it.getString(ARG_CATEGORY_NAME),
-                categoryImage = getCategoryImage(it.getString(ARG_CATEGORY_IMAGE_URL)),
+                categoryImageUrl =it.getString(ARG_CATEGORY_IMAGE_URL),
                 recipes = getRecipesByCategoryId(it.getInt(ARG_CATEGORY_ID))
             )
         }
-    }
-
-    private fun getCategoryImage(categoryImageUrl: String?): Drawable? {
-        val context = getApplication<Application>().applicationContext
-        val drawable = try {
-            Drawable.createFromStream(categoryImageUrl?.let { context.assets.open(it) }, null)
-        } catch (e: Exception) {
-            Log.e("!!! file open error", categoryImageUrl, e)
-            null
-        }
-
-        return drawable
     }
 
     private fun getRecipesByCategoryId(categoryId: Int?): List<Recipe>? {

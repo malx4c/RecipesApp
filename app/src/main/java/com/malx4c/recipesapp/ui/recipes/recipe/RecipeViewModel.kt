@@ -2,8 +2,6 @@ package com.malx4c.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +18,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val portionsCount: Int = 1,
         var isFavorites: Boolean = false,
         val recipe: Recipe? = null,
-        val recipeImage: Drawable? = null
+        val recipeImageUrl: String? = null
     )
 
     private var _recipeState = MutableLiveData(RecipeUiState())
@@ -30,19 +28,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     /* TODO load from network*/
     fun loadRecipe(recipesId: Int) {
         val recipe = STUB.getRecipeById(recipesId)
-        val context = getApplication<Application>().applicationContext
-
-        val recipeImage = try {
-            Drawable.createFromStream(recipe?.imageUrl?.let { context.assets.open(it) }, null)
-        } catch (e: Exception) {
-            Log.e("!!! image open error", recipe?.imageUrl, e)
-            null
-        }
 
         _recipeState.value = recipeState.value?.copy(
             isFavorites = getFavorites().contains(recipesId.toString()),
             recipe = recipe,
-            recipeImage = recipeImage
+            recipeImageUrl = recipe?.imageUrl
         )
     }
 

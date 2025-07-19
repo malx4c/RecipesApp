@@ -21,7 +21,9 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     private fun loadCategories() {
-        _categoriesListViewState.value?.categories = STUB.getCategories()
+        _categoriesListViewState.value = categoriesListViewState.value?.copy(
+            categories = STUB.getCategories()
+        )
     }
 
     fun getCategoryById(categoryId: Int): Category? {

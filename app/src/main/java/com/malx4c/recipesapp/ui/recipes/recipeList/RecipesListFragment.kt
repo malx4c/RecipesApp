@@ -1,6 +1,8 @@
 package com.malx4c.recipesapp.ui.recipes.recipeList
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
@@ -37,7 +40,7 @@ class RecipesListFragment : Fragment() {
 
         binding.tvRecipesTitle.text = category?.categoryName
         binding.ivRecipes.apply {
-            setImageDrawable(category?.categoryImage)
+            setImageDrawable(getCategoryImage(category?.categoryImageUrl))
             contentDescription = category?.categoryName
         }
 
@@ -46,16 +49,24 @@ class RecipesListFragment : Fragment() {
 
     private fun initRecipes() {
 
-        val recipesAdapter = recipesListViewModel.recipesListState.value?.recipes?.let {
-            RecipesListAdapter(it)
-        }
-        binding.rvRecipes.adapter = recipesAdapter
+        val recipesListAdapter = RecipesListAdapter(emptyList())
+        binding.rvRecipes.adapter = recipesListAdapter
 
-        recipesAdapter?.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
-            override fun onItemClick(recipesId: Int) {
-                openRecipeByRecipeId(recipesId)
-            }
-        })
+        val recipesObserver = Observer<RecipesListViewModel.RecipesListUiState> {
+            it.recipes?.let { recipesListAdapter.update(it) }
+
+            recipesListAdapter.setOnItemClickListener(object :
+                RecipesListAdapter.OnItemClickListener {
+                override fun onItemClick(recipesId: Int) {
+                    openRecipeByRecipeId(recipesId)
+                }
+            })
+        }
+
+        recipesListViewModel.recipesListState.observe(
+            viewLifecycleOwner,
+            recipesObserver
+        )
     }
 
     private fun openRecipeByRecipeId(recipesId: Int) {
@@ -68,6 +79,20 @@ class RecipesListFragment : Fragment() {
             setReorderingAllowed(true)
             addToBackStack(null)
         }
+    }
+
+    private fun getCategoryImage(categoryImageUrl: String?): Drawable? {
+        val drawable = try {
+            Drawable.createFromStream(
+                categoryImageUrl?.let { view?.context?.assets?.open(it) },
+                null
+            )
+        } catch (e: Exception) {
+            Log.e("!!! file open error", categoryImageUrl, e)
+            null
+        }
+
+        return drawable
     }
 
     override fun onDestroyView() {

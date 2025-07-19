@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.malx4c.recipesapp.ARG_CATEGORY_ID
 import com.malx4c.recipesapp.ARG_CATEGORY_IMAGE_URL
 import com.malx4c.recipesapp.ARG_CATEGORY_NAME
@@ -37,18 +38,23 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun initRecycler() {
-
-        val categoryAdapter = categoriesListViewModel.categoriesListViewState.value?.let {
-            CategoriesListAdapter(
-                it.categories)
-        }
+        val categoryAdapter = CategoriesListAdapter(emptyList())
         binding.rvCategories.adapter = categoryAdapter
 
-        categoryAdapter?.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
-            }
-        })
+        val categoryObserver = Observer<CategoriesListViewModel.CategoriesListUiState> {
+            categoryAdapter.update(it.categories)
+            categoryAdapter.setOnItemClickListener(object :
+                CategoriesListAdapter.OnItemClickListener {
+                override fun onItemClick(categoryId: Int) {
+                    openRecipesByCategoryId(categoryId)
+                }
+            })
+        }
+
+        categoriesListViewModel.categoriesListViewState.observe(
+            viewLifecycleOwner,
+            categoryObserver
+        )
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
@@ -61,7 +67,7 @@ class CategoriesListFragment : Fragment() {
             }
         }
 
-        parentFragmentManager.commit{
+        parentFragmentManager.commit {
             replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(null)
