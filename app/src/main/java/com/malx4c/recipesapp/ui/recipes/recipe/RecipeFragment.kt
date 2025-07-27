@@ -12,9 +12,9 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.ui.IngredientsAdapter
 import com.malx4c.recipesapp.ui.MethodAdapter
 import com.malx4c.recipesapp.R
@@ -35,6 +35,7 @@ class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
 }
 
 class RecipeFragment : Fragment() {
+    private val args: RecipeFragmentArgs by navArgs()
     private val recipeViewModel: RecipeViewModel by viewModels()
     private var _binding: FragmentRecipeBinding? = null
     private val binding
@@ -56,8 +57,8 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
-        val recipesId: Int? = arguments?.getInt(ARG_RECIPE_ID)
-        recipesId?.let { recipeViewModel.loadRecipe(it) }
+        val recipesId: Int = args.recipeId
+        recipesId.let { recipeViewModel.loadRecipe(it) }
 
         val ingredientsAdapter =
             recipeViewModel.recipeState.value?.recipe?.let { IngredientsAdapter(it) }

@@ -2,11 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
     namespace = "com.malx4c.recipesapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.malx4c.recipesapp"
@@ -41,7 +42,7 @@ android {
 }
 
 dependencies {
-    val fragment_version = "1.8.7"
+    val fragment_version = "1.8.8"
     val nav_version = "2.9.2"
 
     implementation(libs.androidx.core.ktx)
@@ -53,7 +54,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
-    implementation("androidx.navigation:navigation-compose:${nav_version}")
     implementation("androidx.navigation:navigation-fragment:${nav_version}")
     implementation("androidx.navigation:navigation-ui:${nav_version}")
 }
