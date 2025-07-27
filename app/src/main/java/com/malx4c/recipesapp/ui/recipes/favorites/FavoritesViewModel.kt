@@ -29,6 +29,9 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
         val favoritesList: Set<String>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
         val recipesIds: Set<Int>? = favoritesList?.map { it.toInt() }?.toSet()
 
-        _favoritesState.value?.recipes = recipesIds?.let { STUB.getRecipesByIds(it) }
+        _favoritesState.value = favoritesState.value?.copy (
+            recipes = recipesIds?.let { STUB.getRecipesByIds(it) }
+        )
+
     }
 }

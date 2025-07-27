@@ -5,12 +5,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.findNavController
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
-import com.malx4c.recipesapp.ui.categories.CategoriesListFragment
-import com.malx4c.recipesapp.ui.recipes.favorites.FavoritesFragment
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,25 +29,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        supportFragmentManager.commit {
-            add(R.id.mainContainer, CategoriesListFragment())
-        }
-
         binding.btnCategories.setOnClickListener {
-            showFragment(CategoriesListFragment())
+            showFragment(R.id.categoriesListFragment)
         }
 
         binding.btnFavorites.setOnClickListener {
-            showFragment(FavoritesFragment())
+            showFragment(R.id.favoritesFragment)
         }
     }
 
-    private fun showFragment(fragment: Fragment) {
-        supportFragmentManager.commit {
-            replace(R.id.mainContainer, fragment)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+    private fun showFragment(fragmentId: Int) {
+        findNavController(R.id.nav_host_fragment).navigate(fragmentId)
     }
 
     override fun onDestroy() {

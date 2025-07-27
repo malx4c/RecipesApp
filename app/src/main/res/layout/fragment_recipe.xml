@@ -2,13 +2,13 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
-        android:id="@+id/recipeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_main_color"
@@ -39,16 +39,16 @@
                 android:id="@+id/btnSetFavorites"
                 android:layout_width="@dimen/image_favorite_ic_size"
                 android:layout_height="@dimen/image_favorite_ic_size"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/title_favourites"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="@dimen/default_margin"
                 android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
                 android:background="@android:color/transparent"
                 android:clickable="true"
+                android:contentDescription="@string/title_favourites"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/ic_heart" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -104,7 +104,7 @@
             android:background="@drawable/shape_rounded_rv"
             android:paddingHorizontal="@dimen/additional_padding"
             android:paddingVertical="@dimen/gap"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <TextView
             style="@style/StyleTitle20"
@@ -122,7 +122,7 @@
             android:background="@drawable/shape_rounded_rv"
             android:paddingHorizontal="@dimen/additional_padding"
             android:paddingVertical="@dimen/gap"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

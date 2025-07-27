@@ -7,13 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.malx4c.recipesapp.ARG_RECIPE_ID
 import com.malx4c.recipesapp.R
-import com.malx4c.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -34,17 +32,25 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         recipesListViewModel.loadRecipesByCategoryId(arguments)
-        val category = recipesListViewModel.recipesListState.value
 
-        binding.tvRecipesTitle.text = category?.categoryName
-        binding.ivRecipes.apply {
-            setImageDrawable(getCategoryImage(category?.categoryImageUrl))
-            contentDescription = category?.categoryName
+        initRecipesTitle()
+        initRecipes()
+    }
+
+    private fun initRecipesTitle() {
+        val categoryObserver = Observer<RecipesListViewModel.RecipesListUiState> {
+            binding.tvRecipesTitle.text = it.categoryName
+            binding.ivRecipes.apply {
+                setImageDrawable(getCategoryImage(it.categoryImageUrl))
+                contentDescription = it.categoryName
+            }
         }
 
-        initRecipes()
+        recipesListViewModel.recipesListState.observe(
+            viewLifecycleOwner,
+            categoryObserver
+        )
     }
 
     private fun initRecipes() {
@@ -74,11 +80,7 @@ class RecipesListFragment : Fragment() {
             putInt(ARG_RECIPE_ID, recipesId)
         }
 
-        parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipeFragment, bundle)
     }
 
     private fun getCategoryImage(categoryImageUrl: String?): Drawable? {

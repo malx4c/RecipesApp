@@ -5,16 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.malx4c.recipesapp.ARG_CATEGORY_ID
 import com.malx4c.recipesapp.ARG_CATEGORY_IMAGE_URL
 import com.malx4c.recipesapp.ARG_CATEGORY_NAME
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.FragmentListCategoriesBinding
-import com.malx4c.recipesapp.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
     private val categoriesListViewModel: CategoriesListViewModel by viewModels()
@@ -43,18 +41,20 @@ class CategoriesListFragment : Fragment() {
 
         val categoryObserver = Observer<CategoriesListViewModel.CategoriesListUiState> {
             categoryAdapter.update(it.categories)
-            categoryAdapter.setOnItemClickListener(object :
-                CategoriesListAdapter.OnItemClickListener {
-                override fun onItemClick(categoryId: Int) {
-                    openRecipesByCategoryId(categoryId)
-                }
-            })
         }
 
         categoriesListViewModel.categoriesListViewState.observe(
             viewLifecycleOwner,
             categoryObserver
         )
+
+        categoryAdapter.setOnItemClickListener(object :
+            CategoriesListAdapter.OnItemClickListener {
+            override fun onItemClick(categoryId: Int) {
+                openRecipesByCategoryId(categoryId)
+            }
+        })
+
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
@@ -67,11 +67,7 @@ class CategoriesListFragment : Fragment() {
             }
         }
 
-        parentFragmentManager.commit {
-            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipesListFragment, bundle)
     }
 
     override fun onDestroyView() {
