@@ -1,16 +1,12 @@
 package com.malx4c.recipesapp.ui.recipes.recipeList
 
 import android.app.Application
-import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.malx4c.recipesapp.ARG_CATEGORY_ID
-import com.malx4c.recipesapp.ARG_CATEGORY_IMAGE_URL
-import com.malx4c.recipesapp.ARG_CATEGORY_NAME
 import com.malx4c.recipesapp.data.STUB
+import com.malx4c.recipesapp.model.Category
 import com.malx4c.recipesapp.model.Recipe
-
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,15 +21,13 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     val recipesListState: LiveData<RecipesListUiState>
         get() = _recipesListState
 
-    fun loadRecipesByCategoryId(arguments: Bundle?) {
-        arguments?.let {
-            _recipesListState.value = RecipesListUiState(
-                categoryId = it.getInt(ARG_CATEGORY_ID),
-                categoryName = it.getString(ARG_CATEGORY_NAME),
-                categoryImageUrl =it.getString(ARG_CATEGORY_IMAGE_URL),
-                recipes = getRecipesByCategoryId(it.getInt(ARG_CATEGORY_ID))
-            )
-        }
+    fun loadRecipesByCategory(category: Category) {
+        _recipesListState.value = RecipesListUiState(
+            categoryId = category.id,
+            categoryName = category.title,
+            categoryImageUrl = category.imageUrl,
+            recipes = getRecipesByCategoryId(category.id)
+        )
     }
 
     private fun getRecipesByCategoryId(categoryId: Int?): List<Recipe>? {
