@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import com.malx4c.recipesapp.ARG_RECIPE_ID
-import com.malx4c.recipesapp.R
+import androidx.navigation.findNavController
 import com.malx4c.recipesapp.ui.recipes.recipeList.RecipesListAdapter
 import com.malx4c.recipesapp.databinding.FragmentFavoritesBinding
 
@@ -46,7 +44,11 @@ class FavoritesFragment : Fragment() {
                 recipesAdapter.setOnItemClickListener(object :
                     RecipesListAdapter.OnItemClickListener {
                     override fun onItemClick(recipesId: Int) {
-                        openRecipeByRecipeId(recipesId)
+                        val action =
+                            FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(
+                                recipesId
+                            )
+                        view?.findNavController()?.navigate(action)
                     }
                 })
             }
@@ -56,14 +58,6 @@ class FavoritesFragment : Fragment() {
             viewLifecycleOwner,
             favoritesObserver
         )
-    }
-
-    private fun openRecipeByRecipeId(recipesId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_RECIPE_ID, recipesId)
-        }
-
-        findNavController().navigate(R.id.recipeFragment, bundle)
     }
 
     override fun onDestroyView() {

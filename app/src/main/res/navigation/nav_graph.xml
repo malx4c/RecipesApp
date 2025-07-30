@@ -11,19 +11,25 @@
         tools:layout="@layout/fragment_list_recipes">
         <action
             android:id="@+id/action_recipesListFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment" />
+            app:destination="@id/recipeFragment"
+            app:enterAnim="@anim/slide_right" />
+        <argument
+            android:name="category"
+            app:argType="com.malx4c.recipesapp.model.Category" />
     </fragment>
     <fragment
         android:id="@+id/categoriesListFragment"
         android:name="com.malx4c.recipesapp.ui.categories.CategoriesListFragment"
         android:label="CategoriesListFragment"
-        tools:layout="@layout/fragment_list_categories" >
+        tools:layout="@layout/fragment_list_categories">
         <action
             android:id="@+id/action_categoriesListFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
+            app:destination="@id/recipesListFragment"
+            app:enterAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_categoriesListFragment_to_favoritesFragment"
-            app:destination="@id/favoritesFragment" />
+            app:destination="@id/favoritesFragment"
+            app:enterAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -32,10 +38,12 @@
         tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment" />
+            app:destination="@id/recipeFragment"
+            app:enterAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_favoritesFragment_to_categoriesListFragment"
-            app:destination="@id/categoriesListFragment" />
+            app:destination="@id/categoriesListFragment"
+            app:enterAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/recipeFragment"

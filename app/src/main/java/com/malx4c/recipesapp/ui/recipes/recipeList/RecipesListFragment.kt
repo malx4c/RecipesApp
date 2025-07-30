@@ -10,10 +10,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
-
+    private val args: RecipesListFragmentArgs by navArgs()
     private val recipesListViewModel: RecipesListViewModel by viewModels()
     private var _binding: FragmentListRecipesBinding? = null
     private val binding
@@ -30,8 +31,8 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recipesListViewModel.loadRecipesByCategoryId(arguments)
 
+        recipesListViewModel.loadRecipesByCategory(args.category)
         initRecipesTitle()
         initRecipes()
     }

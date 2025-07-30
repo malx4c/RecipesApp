@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
@@ -39,7 +40,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showFragment(fragmentId: Int) {
-        findNavController(R.id.nav_host_fragment).navigate(fragmentId)
+        val navController = findNavController(R.id.nav_host_fragment)
+        val activeFragmentId = navController.currentDestination?.id
+        if (activeFragmentId == fragmentId) return
+
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .build()
+        navController.navigate(fragmentId, null, navOptions)
     }
 
     override fun onDestroy() {
