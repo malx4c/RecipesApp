@@ -53,7 +53,7 @@ class CategoriesListFragment : Fragment() {
 
     private fun openRecipesByCategoryId(categoryId: Int) {
         val category = categoriesListViewModel.getCategoryById(categoryId)
-            ?: throw IllegalStateException("Category Id: $categoryId not found")
+            ?: throw IllegalArgumentException("Category Id: $categoryId not found")
 
         val action =
             CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(

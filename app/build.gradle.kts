@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
@@ -56,4 +57,5 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
     implementation("androidx.navigation:navigation-fragment:${nav_version}")
     implementation("androidx.navigation:navigation-ui:${nav_version}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 }
