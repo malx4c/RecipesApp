@@ -14,15 +14,20 @@ import com.malx4c.recipesapp.model.Category
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
 
 
 class MainActivity : AppCompatActivity() {
+    private val numberThreads = 10
+    private val threadPool = Executors.newFixedThreadPool(numberThreads) as ThreadPoolExecutor
 
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("ActivityMainBinding is null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        var categories: List<Category>
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         Log.i("!!!", "Метод onCreate() выполняется на потоке: <${Thread.currentThread().name}>'")
 
-        val thread: Thread = Thread {
+        val thread = Thread {
             val url = URL("https://recipes.androidsprint.ru/api/category")
             val connection = url.openConnection() as HttpURLConnection
             connection.connect()
@@ -55,10 +60,30 @@ class MainActivity : AppCompatActivity() {
             Log.i("!!!", "Выполняю запрос на потоке: <${Thread.currentThread().name}>")
             Log.i("!!!", "body: $body")
 
-            val categories: List<Category> = Json.decodeFromString(body)
+            categories = Json.decodeFromString(body)
 
             categories.map { Log.i("!!!", "category: $it") }
 
+            val categoryIds: List<Int> = categories.map { it.id }
+            var requestRecipesURl: URL
+
+            categoryIds.map {
+                requestRecipesURl =
+                    URL("https://recipes.androidsprint.ru/api/category/$it/recipes")
+
+                val connectionRecipe = requestRecipesURl.openConnection() as HttpURLConnection
+                threadPool.submit {
+                    Log.i(
+                        "!!!",
+                        "Выполняю запрос на потоке: <${Thread.currentThread().name}>"
+                    )
+                    connectionRecipe.connect()
+
+                    val responseText = connectionRecipe.inputStream.bufferedReader().readText()
+                    Log.i("!!!", responseText)
+                }
+
+            }
         }
         thread.start()
     }
@@ -77,5 +102,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        threadPool.shutdown()
     }
 }
