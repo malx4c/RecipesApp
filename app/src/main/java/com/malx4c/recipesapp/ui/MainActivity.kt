@@ -12,8 +12,9 @@ import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
 import com.malx4c.recipesapp.model.Category
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadPoolExecutor
 
@@ -28,6 +29,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var categories: List<Category>
+        var categoryIds: List<Int> = emptyList()
+        val logger: HttpLoggingInterceptor = HttpLoggingInterceptor { message ->
+            println("HTTP !!! $message")
+        }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(logger)
+            .build()
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,43 +59,41 @@ class MainActivity : AppCompatActivity() {
             showFragment(R.id.favoritesFragment)
         }
 
-        Log.i("!!!", "Метод onCreate() выполняется на потоке: <${Thread.currentThread().name}>'")
+        Log.i("!!!", "\tМетод onCreate() выполняется на потоке: <${Thread.currentThread().name}>'")
 
         val thread = Thread {
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
+            threadPool.submit {
+                val request = Request.Builder()
+                    .url("https://recipes.androidsprint.ru/api/category")
+                    .build()
+                val response = client.newCall(request).execute()
+                val body = response.body?.string() ?: ""
 
-            val body = connection.inputStream.bufferedReader().readText()
+                Log.i("!!!", "\t->Выполняю запрос на потоке: <${Thread.currentThread().name}>")
+                Log.i("!!!", "body: $body")
 
-            Log.i("!!!", "Выполняю запрос на потоке: <${Thread.currentThread().name}>")
-            Log.i("!!!", "body: $body")
-
-            categories = Json.decodeFromString(body)
-
-            categories.map { Log.i("!!!", "category: $it") }
-
-            val categoryIds: List<Int> = categories.map { it.id }
-            var requestRecipesURl: URL
+                categories = Json.decodeFromString(body)
+                categories.map { Log.i("!!!", "category: $it") }
+                categoryIds = categories.map { it.id }
+            }.get()
 
             categoryIds.map {
-                requestRecipesURl =
-                    URL("https://recipes.androidsprint.ru/api/category/$it/recipes")
+                val requestRecipes = Request.Builder()
+                    .url("https://recipes.androidsprint.ru/api/category/$it/recipes")
+                    .build()
 
-                val connectionRecipe = requestRecipesURl.openConnection() as HttpURLConnection
                 threadPool.submit {
                     Log.i(
                         "!!!",
-                        "Выполняю запрос на потоке: <${Thread.currentThread().name}>"
+                        "\tВыполняю запрос на потоке: <${Thread.currentThread().name}>"
                     )
-                    connectionRecipe.connect()
-
-                    val responseText = connectionRecipe.inputStream.bufferedReader().readText()
-                    Log.i("!!!", responseText)
+                    val responseRecipes = client.newCall(requestRecipes).execute()
+                    val body = responseRecipes.body?.string() ?: ""
+                    Log.i("!!!", body)
                 }
-
             }
         }
+
         thread.start()
     }
 
