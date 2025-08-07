@@ -21,7 +21,7 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
         itemClickListener = listener
     }
 
-    fun update( _dataSet: List<Category>) {
+    fun update(_dataSet: List<Category>) {
         dataSet = _dataSet
     }
 
