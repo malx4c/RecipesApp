@@ -19,12 +19,15 @@ class IngredientsAdapter(private val recipe: Recipe) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredient: Ingredient) {
+            var totalQuantity = ingredient.quantity
 
-            val totalQuantity = BigDecimal(ingredient.quantity)
-                .multiply(BigDecimal(quantity))
-                .setScale(1, RoundingMode.HALF_UP)
-                .stripTrailingZeros()
-                .toPlainString()
+            if (isNumeric(ingredient.quantity)) {
+                totalQuantity = BigDecimal(ingredient.quantity)
+                    .multiply(BigDecimal(quantity))
+                    .setScale(1, RoundingMode.HALF_UP)
+                    .stripTrailingZeros()
+                    .toPlainString()
+            }
 
             binding.apply {
                 tvIngredientDescription.text = ingredient.description
@@ -34,7 +37,6 @@ class IngredientsAdapter(private val recipe: Recipe) :
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-
         val inflater = LayoutInflater.from(viewGroup.context)
         val binding = ItemIngredientsBinding.inflate(inflater, viewGroup, false)
 
@@ -42,7 +44,6 @@ class IngredientsAdapter(private val recipe: Recipe) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
         viewHolder.bind(dataSet[position])
     }
 
@@ -52,4 +53,7 @@ class IngredientsAdapter(private val recipe: Recipe) :
         quantity = progress
         notifyDataSetChanged()
     }
+
+    private fun isNumeric(value: String?): Boolean =
+        value?.toBigDecimalOrNull() != null
 }

@@ -5,13 +5,14 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
 import com.malx4c.recipesapp.PREFS_NAME
-import com.malx4c.recipesapp.data.STUB
+import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Recipe
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
-
+    private val recipeRepository = RecipesRepository()
     private var prefs = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     data class RecipeUiState(
@@ -25,15 +26,24 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     val recipeState: LiveData<RecipeUiState>
         get() = _recipeState
 
+    private val _message = MutableLiveData<String>()
+    val message: LiveData<String>
+        get() = _message
+
+
     /* TODO load from network*/
     fun loadRecipe(recipesId: Int) {
-        val recipe = STUB.getRecipeById(recipesId)
 
-        _recipeState.value = recipeState.value?.copy(
-            isFavorites = getFavorites().contains(recipesId.toString()),
-            recipe = recipe,
-            recipeImageUrl = recipe?.imageUrl
-        )
+        val recipe = recipeRepository.getRecipeById(recipesId)
+        if (recipe !== null) {
+            _recipeState.value = recipeState.value?.copy(
+                isFavorites = getFavorites().contains(recipesId.toString()),
+                recipe = recipe,
+                recipeImageUrl = recipe.imageUrl
+            )
+        } else {
+            _message.postValue(ERROR_MESSAGE_FETCH_DATA)
+        }
     }
 
     fun onFavoritesClicked() {

@@ -7,14 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
 import com.malx4c.recipesapp.PREFS_NAME
-import com.malx4c.recipesapp.data.STUB
+import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Recipe
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
+    private val recipeRepository = RecipesRepository()
+
     private var prefs = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     data class FavoritesUiState(
-        var recipes: List<Recipe>? = emptyList(),
+        var recipes: List<Recipe?>? = emptyList(),
     )
 
     private var _favoritesState = MutableLiveData(FavoritesUiState())
@@ -26,12 +28,11 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun loadFavorites() {
-        val favoritesList: Set<String>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
-        val recipesIds: Set<Int>? = favoritesList?.map { it.toInt() }?.toSet()
+        val recipesIds: Set<String?>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
+        val _recipes = recipeRepository.getRecipesByIds(recipesIds) ?: emptyList()
 
-        _favoritesState.value = favoritesState.value?.copy (
-            recipes = recipesIds?.let { STUB.getRecipesByIds(it) }
+        _favoritesState.value = favoritesState.value?.copy(
+            recipes = _recipes
         )
-
     }
 }
