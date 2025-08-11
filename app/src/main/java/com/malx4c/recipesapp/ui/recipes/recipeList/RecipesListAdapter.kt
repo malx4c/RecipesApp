@@ -21,8 +21,8 @@ class RecipesListAdapter(private var dataSet: List<Recipe>) :
         itemClickListener = listener
     }
 
-    fun update( _dataSet: List<Recipe>) {
-        dataSet = _dataSet
+    fun update(_dataSet: List<Recipe?>?) {
+        dataSet = _dataSet?.filterNotNull()?: emptyList()
     }
 
     inner class ViewHolder(private val binding: ItemRecipesBinding) :

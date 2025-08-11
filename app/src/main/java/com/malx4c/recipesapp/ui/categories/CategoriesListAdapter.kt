@@ -21,8 +21,9 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
         itemClickListener = listener
     }
 
-    fun update( _dataSet: List<Category>) {
-        dataSet = _dataSet
+    fun update(_dataSet: List<Category?>?) {
+        dataSet = _dataSet?.filterNotNull() ?: emptyList()
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(private val binding: ItemCategoryBinding) :

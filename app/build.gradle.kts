@@ -58,8 +58,10 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:${nav_version}")
     implementation("androidx.navigation:navigation-ui:${nav_version}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
-
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+
 }

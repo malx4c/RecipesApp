@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -73,6 +74,7 @@ class RecipeFragment : Fragment() {
             binding.tvRecipeTitle.text = it.recipe?.title
             val imageFavoritesId: Int =
                 if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
+
             binding.btnSetFavorites.setImageResource(imageFavoritesId)
             binding.ivRecipe.setImageDrawable(getRecipeImage(it.recipeImageUrl))
             binding.tvNumberServings.text = it.portionsCount.toString()
@@ -87,6 +89,13 @@ class RecipeFragment : Fragment() {
 
         recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)
         binding.btnSetFavorites.setOnClickListener { recipeViewModel.onFavoritesClicked() }
+
+        recipeViewModel.message.observe(viewLifecycleOwner, Observer { message ->
+            message?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     private fun getRecipeImage(recipeImageUrl: String?): Drawable? {
