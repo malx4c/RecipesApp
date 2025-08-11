@@ -1,8 +1,6 @@
 package com.malx4c.recipesapp.ui.recipes.recipeList
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -41,10 +41,12 @@ class RecipesListFragment : Fragment() {
     private fun initRecipesTitle() {
         val categoryObserver = Observer<RecipesListViewModel.RecipesListUiState> {
             binding.tvRecipesTitle.text = it.categoryName
-            binding.ivRecipes.apply {
-                setImageDrawable(getCategoryImage(it.categoryImageUrl))
-                contentDescription = it.categoryName
-            }
+            Glide.with(this)
+                .load(it.categoryImageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipes)
+            binding.ivRecipes.contentDescription = it.categoryName
         }
 
         recipesListViewModel.recipesListState.observe(
@@ -83,20 +85,6 @@ class RecipesListFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun getCategoryImage(categoryImageUrl: String?): Drawable? {
-        val drawable = try {
-            Drawable.createFromStream(
-                categoryImageUrl?.let { view?.context?.assets?.open(it) },
-                null
-            )
-        } catch (e: Exception) {
-            Log.e("!!! file open error", categoryImageUrl, e)
-            null
-        }
-
-        return drawable
     }
 
     override fun onDestroyView() {

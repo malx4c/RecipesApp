@@ -63,5 +63,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
-
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

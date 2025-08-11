@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.malx4c.recipesapp.API_IMAGE_SOURCE
+import com.malx4c.recipesapp.API_URL
 import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Category
@@ -31,7 +33,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         _recipesListState.value = RecipesListUiState(
             categoryId = category.id,
             categoryName = category.title,
-            categoryImageUrl = category.imageUrl,
+            categoryImageUrl = "$API_URL$API_IMAGE_SOURCE${category.imageUrl}",
             recipes = getRecipesByCategoryId(category.id)
         )
     }

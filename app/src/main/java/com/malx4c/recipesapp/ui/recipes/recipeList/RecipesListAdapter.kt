@@ -1,10 +1,12 @@
 package com.malx4c.recipesapp.ui.recipes.recipeList
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.malx4c.recipesapp.API_IMAGE_SOURCE
+import com.malx4c.recipesapp.API_URL
+import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.ItemRecipesBinding
 import com.malx4c.recipesapp.model.Recipe
 
@@ -22,7 +24,7 @@ class RecipesListAdapter(private var dataSet: List<Recipe>) :
     }
 
     fun update(_dataSet: List<Recipe?>?) {
-        dataSet = _dataSet?.filterNotNull()?: emptyList()
+        dataSet = _dataSet?.filterNotNull() ?: emptyList()
     }
 
     inner class ViewHolder(private val binding: ItemRecipesBinding) :
@@ -32,14 +34,11 @@ class RecipesListAdapter(private var dataSet: List<Recipe>) :
 
             binding.tvTitleRecipes.text = recipe.title
 
-            val drawable = try {
-                Drawable.createFromStream(recipe.imageUrl.let { this.itemView.context.assets.open(it) }, null)
-            } catch (e: Exception) {
-                Log.e("!!! image open error", recipe.imageUrl, e)
-                null
-            }
-
-            binding.ivRecipes.setImageDrawable(drawable)
+            Glide.with(this.itemView.context)
+                .load("$API_URL$API_IMAGE_SOURCE${recipe.imageUrl}")
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipes)
 
             itemView.setOnClickListener { itemClickListener?.onItemClick(recipe.id) }
         }
