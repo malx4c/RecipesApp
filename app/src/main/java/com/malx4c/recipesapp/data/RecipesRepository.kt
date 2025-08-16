@@ -1,6 +1,7 @@
 package com.malx4c.recipesapp.data
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.malx4c.recipesapp.API_URL
 import com.malx4c.recipesapp.model.Category
 import com.malx4c.recipesapp.model.Recipe
 import com.malx4c.recipesapp.ui.RecipeApiService
@@ -33,7 +34,7 @@ class RecipesRepository {
     init {
         val contentType = "application/json".toMediaType()
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://recipes.androidsprint.ru/api/")
+            .baseUrl(API_URL)
             .addConverterFactory(Json.asConverterFactory(contentType))
             .client(client)
             .build()

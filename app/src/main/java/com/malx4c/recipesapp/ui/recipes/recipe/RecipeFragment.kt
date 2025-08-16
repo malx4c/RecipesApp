@@ -1,9 +1,7 @@
 package com.malx4c.recipesapp.ui.recipes.recipe
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.malx4c.recipesapp.ui.IngredientsAdapter
 import com.malx4c.recipesapp.ui.MethodAdapter
@@ -76,7 +75,12 @@ class RecipeFragment : Fragment() {
                 if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
 
             binding.btnSetFavorites.setImageResource(imageFavoritesId)
-            binding.ivRecipe.setImageDrawable(getRecipeImage(it.recipeImageUrl))
+            Glide.with(this)
+                .load(it.recipeImageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipe)
+
             binding.tvNumberServings.text = it.portionsCount.toString()
 
             binding.sbNumberServings.setOnSeekBarChangeListener(
@@ -96,20 +100,6 @@ class RecipeFragment : Fragment() {
             }
         })
 
-    }
-
-    private fun getRecipeImage(recipeImageUrl: String?): Drawable? {
-        val drawable = try {
-            Drawable.createFromStream(
-                recipeImageUrl?.let { view?.context?.assets?.open(it) },
-                null
-            )
-        } catch (e: Exception) {
-            Log.e("!!! file open error", recipeImageUrl, e)
-            null
-        }
-
-        return drawable
     }
 
     private fun getDivider(context: Context) =
