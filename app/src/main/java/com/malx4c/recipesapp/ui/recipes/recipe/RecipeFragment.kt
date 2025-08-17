@@ -60,12 +60,11 @@ class RecipeFragment : Fragment() {
         val recipesId: Int = args.recipeId
         recipesId.let { recipeViewModel.loadRecipe(it) }
 
-        val ingredientsAdapter =
-            recipeViewModel.recipeState.value?.recipe?.let { IngredientsAdapter(it) }
+        val ingredientsAdapter = IngredientsAdapter()
         binding.rvIngredients.adapter = ingredientsAdapter
         binding.rvIngredients.addItemDecoration(getDivider(binding.rvMethod.context))
 
-        val methodAdapter = recipeViewModel.recipeState.value?.recipe?.let { MethodAdapter(it) }
+        val methodAdapter = MethodAdapter()
         binding.rvMethod.adapter = methodAdapter
         binding.rvMethod.addItemDecoration(getDivider(binding.rvMethod.context))
 
@@ -82,13 +81,14 @@ class RecipeFragment : Fragment() {
                 .into(binding.ivRecipe)
 
             binding.tvNumberServings.text = it.portionsCount.toString()
-
             binding.sbNumberServings.setOnSeekBarChangeListener(
                 PortionSeekBarListener { progress ->
-                    ingredientsAdapter?.updateIngredients(progress)
+                    ingredientsAdapter.updateIngredients(progress)
                     recipeViewModel.updateNumberPortions(progress)
                 }
             )
+            methodAdapter.update(it.recipe?.method ?: emptyList())
+            ingredientsAdapter.update(it.recipe?.ingredients ?: emptyList())
         }
 
         recipeViewModel.recipeState.observe(viewLifecycleOwner, recipeObserver)

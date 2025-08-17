@@ -5,14 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemIngredientsBinding
 import com.malx4c.recipesapp.model.Ingredient
-import com.malx4c.recipesapp.model.Recipe
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val recipe: Recipe) :
+class IngredientsAdapter() :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    var dataSet: List<Ingredient> = recipe.ingredients
+    private var dataSet: List<Ingredient> = emptyList()
     private var quantity: Int = 1
 
     inner class ViewHolder(private val binding: ItemIngredientsBinding) :
@@ -53,6 +52,12 @@ class IngredientsAdapter(private val recipe: Recipe) :
         quantity = progress
         notifyDataSetChanged()
     }
+
+    fun update(_dataSet: List<Ingredient>) {
+        dataSet = _dataSet
+        notifyDataSetChanged()
+    }
+
 
     private fun isNumeric(value: String?): Boolean =
         value?.toBigDecimalOrNull() != null

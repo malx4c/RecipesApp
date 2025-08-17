@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.malx4c.recipesapp.databinding.ItemMethodBinding
-import com.malx4c.recipesapp.model.Recipe
 
-class MethodAdapter(private val recipe: Recipe) :
+class MethodAdapter() :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
-    var dataSet: List<String> = recipe.method
+    private var dataSet: List<String> = emptyList()
 
     inner class ViewHolder(private val binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -34,4 +33,9 @@ class MethodAdapter(private val recipe: Recipe) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun update(_dataSet: List<String>) {
+        dataSet = _dataSet
+        notifyDataSetChanged()
+    }
 }
