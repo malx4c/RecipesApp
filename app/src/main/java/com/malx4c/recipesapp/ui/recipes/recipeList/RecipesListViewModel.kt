@@ -4,12 +4,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.API_IMAGE_SOURCE
 import com.malx4c.recipesapp.API_URL
 import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Category
 import com.malx4c.recipesapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
     private val recipeRepository = RecipesRepository()
@@ -34,14 +36,20 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             categoryId = category.id,
             categoryName = category.title,
             categoryImageUrl = "$API_URL$API_IMAGE_SOURCE${category.imageUrl}",
-            recipes = getRecipesByCategoryId(category.id)
         )
+        getRecipesByCategoryId(category.id)
     }
 
-    private fun getRecipesByCategoryId(categoryId: Int?): List<Recipe?>? {
-        return categoryId?.let { recipeRepository.getRecipesByCategoryId(it) } ?: run {
-            _message.postValue(ERROR_MESSAGE_FETCH_DATA)
-            null
+    private fun getRecipesByCategoryId(categoryId: Int?) {
+        viewModelScope.launch {
+            val _recipes = categoryId?.let { recipeRepository.getRecipesByCategoryId(it) }
+            if (_recipes !== null) {
+                _recipesListState.value = recipesListState.value?.copy(
+                    recipes = _recipes
+                )
+            } else {
+                _message.postValue(ERROR_MESSAGE_FETCH_DATA)
+            }
         }
     }
 }

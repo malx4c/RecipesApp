@@ -3,9 +3,11 @@ package com.malx4c.recipesapp.ui.categories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Category
+import kotlinx.coroutines.launch
 
 class CategoriesListViewModel : ViewModel() {
     private val recipeRepository = RecipesRepository()
@@ -27,7 +29,8 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     private fun loadCategories() {
-        recipeRepository.getCategories { categoriesNew ->
+        viewModelScope.launch {
+            val categoriesNew = recipeRepository.getCategories()
             if (categoriesNew != null) {
                 _categoriesListViewState.postValue(
                     categoriesListViewState.value?.copy(

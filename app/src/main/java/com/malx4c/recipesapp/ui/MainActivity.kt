@@ -9,13 +9,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
-import java.util.concurrent.Executors
-import java.util.concurrent.ThreadPoolExecutor
 
 class MainActivity : AppCompatActivity() {
-    private val numberThreads = 10
-    private val threadPool = Executors.newFixedThreadPool(numberThreads) as ThreadPoolExecutor
-
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("ActivityMainBinding is null")
@@ -56,6 +51,5 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        threadPool.shutdown()
-    }
+     }
 }
