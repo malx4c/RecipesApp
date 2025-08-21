@@ -16,7 +16,7 @@ import com.malx4c.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
-    private val recipeRepository = RecipesRepository()
+    private val recipeRepository = RecipesRepository(application.applicationContext)
     private var prefs = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     data class RecipeUiState(

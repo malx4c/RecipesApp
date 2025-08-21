@@ -14,7 +14,7 @@ import com.malx4c.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
-    private val recipeRepository = RecipesRepository()
+    private val recipeRepository = RecipesRepository(application.applicationContext)
 
     data class RecipesListUiState(
         val categoryId: Int? = null,

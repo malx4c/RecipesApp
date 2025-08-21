@@ -1,7 +1,9 @@
 package com.malx4c.recipesapp.data
 
+import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.malx4c.recipesapp.API_URL
+import com.malx4c.recipesapp.data.database.AppDatabase
 import com.malx4c.recipesapp.model.Category
 import com.malx4c.recipesapp.model.Recipe
 import com.malx4c.recipesapp.ui.RecipeApiService
@@ -12,8 +14,9 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Call
 import retrofit2.Retrofit
 
-class RecipesRepository {
+class RecipesRepository(context: Context) {
     private val service: RecipeApiService
+    private var database: AppDatabase? = null
 
     init {
         val contentType = "application/json".toMediaType()
@@ -23,13 +26,38 @@ class RecipesRepository {
             .build()
 
         service = retrofit.create(RecipeApiService::class.java)
+        database = AppDatabase.getInstance(context)
+
     }
 
-    suspend fun getCategories(): List<Category?>? {
+    suspend fun getCategories(): List<Category> {
+        return withContext(Dispatchers.IO) {
+            var categories: List<Category?>? = getCategoriesFromCache()
+            if (categories.isNullOrEmpty()) {
+                categories = getCategoriesFromBackEnd()
+                if (!categories.isNullOrEmpty()) {
+                    database?.categoryDao()?.insertAll(categories.filterNotNull())
+                }
+            }
+            categories?.filterNotNull() ?: emptyList()
+        }
+    }
+
+    private suspend fun getCategoriesFromBackEnd(): List<Category?>? {
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<List<Category?>?>? = service.getCategories()
                 call?.execute()?.body()
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    private suspend fun getCategoriesFromCache(): List<Category>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                database?.categoryDao()?.getAll()
             } catch (e: Exception) {
                 null
             }
