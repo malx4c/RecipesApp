@@ -1,6 +1,7 @@
 package com.malx4c.recipesapp.data
 
 import android.content.Context
+import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.malx4c.recipesapp.API_URL
 import com.malx4c.recipesapp.data.database.AppDatabase
@@ -24,10 +25,8 @@ class RecipesRepository(context: Context) {
             .baseUrl(API_URL)
             .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
-
         service = retrofit.create(RecipeApiService::class.java)
         database = AppDatabase.getInstance(context)
-
     }
 
     suspend fun getCategories(): List<Category> {
@@ -44,6 +43,7 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getCategoriesFromBackEnd(): List<Category?>? {
+        Log.d("!!! ", "getCategoriesFromBackEnd()")
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<List<Category?>?>? = service.getCategories()
@@ -55,6 +55,7 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getCategoriesFromCache(): List<Category>? {
+        Log.d("!!! ", "getCategoriesFromCache()")
         return withContext(Dispatchers.IO) {
             try {
                 database?.categoryDao()?.getAll()
@@ -64,7 +65,22 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getRecipesByCategoryId(categoryId: Int = 0): List<Recipe?>? {
+    suspend fun getRecipesByCategoryId(categoryId: Int = 0): List<Recipe?> {
+        return withContext(Dispatchers.IO) {
+            var recipes: List<Recipe?>? = getRecipesByCategoryIdFromCache(categoryId)
+            if (recipes.isNullOrEmpty()) {
+                recipes = getRecipesByCategoryIdFromBackEnd(categoryId)
+                if (!recipes.isNullOrEmpty()) {
+                    recipes.map { it?.categoryId = categoryId }
+                    database?.recipesDao()?.insertAll(recipes.filterNotNull())
+                }
+            }
+            recipes?.filterNotNull() ?: emptyList()
+        }
+    }
+
+    private suspend fun getRecipesByCategoryIdFromBackEnd(categoryId: Int = 0): List<Recipe?>? {
+        Log.d("!!! ", "getRecipesByCategoryIdFromBackEnd($categoryId)")
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<List<Recipe?>?>? = service.getRecipes(categoryId)
@@ -75,11 +91,47 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getRecipeById(recipesId: Int): Recipe? {
+    private suspend fun getRecipesByCategoryIdFromCache(categoryId: Int = 0): List<Recipe?>? {
+        Log.d("!!! ", "getRecipesByCategoryIdFromCache($categoryId)")
+        return withContext(Dispatchers.IO) {
+            try {
+                database?.recipesDao()?.getByCategoryId(categoryId)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    suspend fun getRecipeById(recipeId: Int): Recipe? {
+        return withContext(Dispatchers.IO) {
+            var recipe: Recipe? = getRecipeByIdFromCache(recipeId)
+            if (recipe == null) {
+                recipe = getRecipeByIdFromBackEnd(recipeId)
+                if (recipe != null) {
+                    database?.recipesDao()?.insertRecipe(recipe)
+                }
+            }
+            recipe
+        }
+    }
+
+    private suspend fun getRecipeByIdFromBackEnd(recipesId: Int): Recipe? {
+        Log.d("!!! ", "getRecipeByIdFromBackEnd($recipesId)")
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<Recipe?>? = service.getRecipe(recipesId)
                 call?.execute()?.body()
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    private suspend fun getRecipeByIdFromCache(recipesId: Int): Recipe? {
+        Log.d("!!! ", "getRecipeByIdFromCache($recipesId)")
+        return withContext(Dispatchers.IO) {
+            try {
+                database?.recipesDao()?.getById(recipesId)
             } catch (e: Exception) {
                 null
             }
@@ -97,4 +149,7 @@ class RecipesRepository(context: Context) {
             }
         }
     }
+
+
+
 }
