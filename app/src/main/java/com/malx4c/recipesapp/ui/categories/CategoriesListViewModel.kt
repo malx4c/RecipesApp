@@ -1,16 +1,17 @@
 package com.malx4c.recipesapp.ui.categories
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Category
 import kotlinx.coroutines.launch
 
-class CategoriesListViewModel : ViewModel() {
-    private val recipeRepository = RecipesRepository()
+class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
+    private val recipeRepository = RecipesRepository(application.applicationContext)
 
     data class CategoriesListUiState(
         var categories: List<Category?>? = null
