@@ -14,6 +14,12 @@ interface RecipesDao {
     @Query("SELECT * FROM recipe WHERE id = :recipeId")
     fun getById(recipeId: Int): Recipe
 
+    @Query("SELECT * FROM recipe WHERE isFavorite = 1")
+    fun getFavorites(): List<Recipe>
+
+    @Query("UPDATE recipe SET isFavorite = NOT isFavorite WHERE id = :recipeId")
+    fun setFavorites(recipeId: Int)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(recipes: List<Recipe>)
 

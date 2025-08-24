@@ -1,21 +1,16 @@
 package com.malx4c.recipesapp.ui.recipes.favorites
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.malx4c.recipesapp.PREFS_KEY_FAVORITES
-import com.malx4c.recipesapp.PREFS_NAME
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
     private val recipeRepository = RecipesRepository(application.applicationContext)
-
-    private var prefs = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     data class FavoritesUiState(
         var recipes: List<Recipe?>? = emptyList(),
@@ -30,10 +25,8 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun loadFavorites() {
-        val recipesIds: Set<String?>? = prefs?.getStringSet(PREFS_KEY_FAVORITES, null)
-
         viewModelScope.launch {
-            val _recipes = recipeRepository.getRecipesByIds(recipesIds) ?: emptyList()
+            val _recipes = recipeRepository.getFavorites() ?: emptyList()
             _favoritesState.value = favoritesState.value?.copy(
                 recipes = _recipes
             )

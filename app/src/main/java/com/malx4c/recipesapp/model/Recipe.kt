@@ -21,6 +21,7 @@ data class Recipe(
     val method: List<String>,
     val imageUrl: String,
     @Transient var categoryId: Int? = null,
+    @Transient var isFavorite: Boolean = false
 ) : Parcelable
 
 class RecipeTypeConverter {
@@ -44,4 +45,3 @@ class RecipeTypeConverter {
         return Json.decodeFromString(data)
     }
 }
-
