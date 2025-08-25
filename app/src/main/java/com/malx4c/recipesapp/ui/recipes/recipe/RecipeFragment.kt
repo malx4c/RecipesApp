@@ -71,7 +71,7 @@ class RecipeFragment : Fragment() {
         val recipeObserver = Observer<RecipeViewModel.RecipeUiState> {
             binding.tvRecipeTitle.text = it.recipe?.title
             val imageFavoritesId: Int =
-                if (it.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
+                if (it.recipe?.isFavorite == true) R.drawable.ic_heart else R.drawable.ic_heart_empty
 
             binding.btnSetFavorites.setImageResource(imageFavoritesId)
             Glide.with(this)
@@ -99,7 +99,6 @@ class RecipeFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         })
-
     }
 
     private fun getDivider(context: Context) =

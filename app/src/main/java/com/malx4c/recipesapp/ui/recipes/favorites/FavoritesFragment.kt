@@ -40,6 +40,7 @@ class FavoritesFragment : Fragment() {
             if (it.recipes?.isEmpty() == true) {
                 binding.tvTitleEmptyFavorites.visibility = View.VISIBLE
             } else {
+                binding.tvTitleEmptyFavorites.visibility = View.INVISIBLE
                 it.recipes?.let { recipesAdapter.update(it) }
                 recipesAdapter.setOnItemClickListener(object :
                     RecipesListAdapter.OnItemClickListener {

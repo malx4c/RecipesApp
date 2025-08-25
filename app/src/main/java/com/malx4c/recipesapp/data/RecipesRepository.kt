@@ -1,7 +1,6 @@
 package com.malx4c.recipesapp.data
 
 import android.content.Context
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.malx4c.recipesapp.API_URL
 import com.malx4c.recipesapp.data.database.AppDatabase
@@ -43,7 +42,6 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getCategoriesFromBackEnd(): List<Category?>? {
-        Log.d("!!! ", "getCategoriesFromBackEnd()")
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<List<Category?>?>? = service.getCategories()
@@ -55,7 +53,6 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getCategoriesFromCache(): List<Category>? {
-        Log.d("!!! ", "getCategoriesFromCache()")
         return withContext(Dispatchers.IO) {
             try {
                 database?.categoryDao()?.getAll()
@@ -80,7 +77,6 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getRecipesByCategoryIdFromBackEnd(categoryId: Int = 0): List<Recipe?>? {
-        Log.d("!!! ", "getRecipesByCategoryIdFromBackEnd($categoryId)")
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<List<Recipe?>?>? = service.getRecipes(categoryId)
@@ -92,7 +88,6 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getRecipesByCategoryIdFromCache(categoryId: Int = 0): List<Recipe?>? {
-        Log.d("!!! ", "getRecipesByCategoryIdFromCache($categoryId)")
         return withContext(Dispatchers.IO) {
             try {
                 database?.recipesDao()?.getByCategoryId(categoryId)
@@ -116,7 +111,6 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getRecipeByIdFromBackEnd(recipesId: Int): Recipe? {
-        Log.d("!!! ", "getRecipeByIdFromBackEnd($recipesId)")
         return withContext(Dispatchers.IO) {
             try {
                 val call: Call<Recipe?>? = service.getRecipe(recipesId)
@@ -128,7 +122,6 @@ class RecipesRepository(context: Context) {
     }
 
     private suspend fun getRecipeByIdFromCache(recipesId: Int): Recipe? {
-        Log.d("!!! ", "getRecipeByIdFromCache($recipesId)")
         return withContext(Dispatchers.IO) {
             try {
                 database?.recipesDao()?.getById(recipesId)
@@ -138,18 +131,23 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getRecipesByIds(recipesIds: Set<String?>?): List<Recipe?>? {
+    suspend fun setFavorite(recipesId: Int?) {
         return withContext(Dispatchers.IO) {
             try {
-                val ids = recipesIds?.mapNotNull { it?.toIntOrNull() }?.joinToString(",")
-                val call: Call<List<Recipe?>?>? = service.getRecipes(ids)
-                call?.execute()?.body()
+                recipesId?.let { database?.recipesDao()?.setFavorites(it) }
             } catch (e: Exception) {
                 null
             }
         }
     }
 
-
-
+    suspend fun getFavorites(): List<Recipe?>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                database?.recipesDao()?.getFavorites()
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
 }
