@@ -1,13 +1,13 @@
 package com.malx4c.recipesapp.model
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 
 @Entity
@@ -20,8 +20,8 @@ data class Recipe(
     val ingredients: List<Ingredient>,
     val method: List<String>,
     val imageUrl: String,
-    @Transient var categoryId: Int? = null,
-    @Transient var isFavorite: Boolean = false
+    @ColumnInfo(name = "categoryId") var categoryId: Int? = null,
+    @ColumnInfo(name = "isFavorite") val isFavorite: Boolean = false
 ) : Parcelable
 
 class RecipeTypeConverter {
