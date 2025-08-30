@@ -1,16 +1,14 @@
 package com.malx4c.recipesapp.ui.recipes.favorites
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
-    private val recipeRepository = RecipesRepository(application.applicationContext)
+class FavoritesViewModel(private val recipeRepository: RecipesRepository) : ViewModel() {
 
     data class FavoritesUiState(
         var recipes: List<Recipe?>? = emptyList(),

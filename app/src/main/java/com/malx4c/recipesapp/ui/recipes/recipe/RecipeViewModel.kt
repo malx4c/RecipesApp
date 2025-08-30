@@ -1,9 +1,8 @@
 package com.malx4c.recipesapp.ui.recipes.recipe
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.API_IMAGE_SOURCE
 import com.malx4c.recipesapp.API_URL
@@ -13,8 +12,7 @@ import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
-    private val recipeRepository = RecipesRepository(application.applicationContext)
+class RecipeViewModel(private val recipeRepository: RecipesRepository) : ViewModel() {
 
     data class RecipeUiState(
         val portionsCount: Int = 1,
