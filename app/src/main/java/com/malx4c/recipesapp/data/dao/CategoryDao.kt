@@ -9,8 +9,8 @@ import com.malx4c.recipesapp.model.Category
 @Dao
 interface CategoryDao {
     @Query("SELECT * FROM category")
-    fun getAll(): List<Category>
+    suspend fun getAll(): List<Category>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(categories: List<Category>)
+    suspend fun insertAll(categories: List<Category>)
 }
