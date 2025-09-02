@@ -1,23 +1,27 @@
 package com.malx4c.recipesapp.data
 
+import android.util.Log
 import com.malx4c.recipesapp.data.dao.CategoryDao
 import com.malx4c.recipesapp.data.dao.RecipesDao
 import com.malx4c.recipesapp.model.Category
 import com.malx4c.recipesapp.model.Recipe
 import com.malx4c.recipesapp.ui.RecipeApiService
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
+import javax.inject.Inject
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     private val recipesDao: RecipesDao,
     private val categoryDao: CategoryDao,
     private val recipeApiService: RecipeApiService,
 ) {
 
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     suspend fun getCategories(): List<Category> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             var categories: List<Category?>? = getCategoriesFromCache()
             if (categories.isNullOrEmpty()) {
                 categories = getCategoriesFromBackEnd()
@@ -30,7 +34,7 @@ class RecipesRepository(
     }
 
     private suspend fun getCategoriesFromBackEnd(): List<Category?>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val call: Call<List<Category?>?>? = recipeApiService.getCategories()
                 call?.execute()?.body()
@@ -41,7 +45,7 @@ class RecipesRepository(
     }
 
     private suspend fun getCategoriesFromCache(): List<Category>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 categoryDao.getAll()
             } catch (e: Exception) {
@@ -51,7 +55,7 @@ class RecipesRepository(
     }
 
     suspend fun getRecipesByCategoryId(categoryId: Int = 0): List<Recipe?> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             var recipes: List<Recipe?>? = getRecipesByCategoryIdFromCache(categoryId)
             if (recipes.isNullOrEmpty()) {
                 recipes = getRecipesByCategoryIdFromBackEnd(categoryId)
@@ -65,7 +69,7 @@ class RecipesRepository(
     }
 
     private suspend fun getRecipesByCategoryIdFromBackEnd(categoryId: Int = 0): List<Recipe?>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val call: Call<List<Recipe?>?>? = recipeApiService.getRecipes(categoryId)
                 call?.execute()?.body()
@@ -76,7 +80,7 @@ class RecipesRepository(
     }
 
     private suspend fun getRecipesByCategoryIdFromCache(categoryId: Int = 0): List<Recipe?>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 recipesDao.getByCategoryId(categoryId)
             } catch (e: Exception) {
@@ -86,7 +90,7 @@ class RecipesRepository(
     }
 
     suspend fun getRecipeById(recipeId: Int): Recipe? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             var recipe: Recipe? = getRecipeByIdFromCache(recipeId)
             if (recipe == null) {
                 recipe = getRecipeByIdFromBackEnd(recipeId)
@@ -99,7 +103,7 @@ class RecipesRepository(
     }
 
     private suspend fun getRecipeByIdFromBackEnd(recipesId: Int): Recipe? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val call: Call<Recipe?>? = recipeApiService.getRecipe(recipesId)
                 call?.execute()?.body()
@@ -110,7 +114,7 @@ class RecipesRepository(
     }
 
     private suspend fun getRecipeByIdFromCache(recipesId: Int): Recipe? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 recipesDao.getById(recipesId)
             } catch (e: Exception) {
@@ -120,17 +124,17 @@ class RecipesRepository(
     }
 
     suspend fun setFavorite(recipesId: Int?) {
-        return withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             try {
                 recipesId?.let { recipesDao.setFavorites(it) }
             } catch (e: Exception) {
-                null
+                Log.e("setFavorite", "Error setting favorite for recipe ID: $recipesId", e)
             }
         }
     }
 
     suspend fun getFavorites(): List<Recipe?>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 recipesDao.getFavorites()
             } catch (e: Exception) {

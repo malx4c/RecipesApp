@@ -10,9 +10,13 @@ import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Category
 import com.malx4c.recipesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipesListViewModel(private val recipeRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipesListViewModel @Inject constructor(private val recipeRepository: RecipesRepository) :
+    ViewModel() {
 
     data class RecipesListUiState(
         val categoryId: Int? = null,

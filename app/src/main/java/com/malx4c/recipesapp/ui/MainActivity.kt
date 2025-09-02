@@ -9,7 +9,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.malx4c.recipesapp.R
 import com.malx4c.recipesapp.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding
@@ -51,5 +53,5 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-     }
+    }
 }

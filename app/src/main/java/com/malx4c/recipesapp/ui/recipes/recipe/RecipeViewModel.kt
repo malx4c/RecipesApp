@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.API_IMAGE_SOURCE
 import com.malx4c.recipesapp.API_URL
 import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
-
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeViewModel(private val recipeRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(private val recipeRepository: RecipesRepository) :
+    ViewModel() {
 
     data class RecipeUiState(
         val portionsCount: Int = 1,

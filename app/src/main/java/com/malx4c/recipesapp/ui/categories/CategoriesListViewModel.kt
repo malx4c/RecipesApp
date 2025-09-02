@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.malx4c.recipesapp.ERROR_MESSAGE_FETCH_DATA
 import com.malx4c.recipesapp.data.RecipesRepository
 import com.malx4c.recipesapp.model.Category
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CategoriesListViewModel(
+@HiltViewModel
+class CategoriesListViewModel @Inject constructor(
     private val recipeRepository: RecipesRepository
 ) : ViewModel() {
 
@@ -32,7 +35,7 @@ class CategoriesListViewModel(
     private fun loadCategories() {
         viewModelScope.launch {
             val categoriesNew = recipeRepository.getCategories()
-            if (categoriesNew != null) {
+            if (categoriesNew.isNotEmpty()) {
                 _categoriesListViewState.postValue(
                     categoriesListViewState.value?.copy(
                         categories = categoriesNew
