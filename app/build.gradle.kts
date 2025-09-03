@@ -4,7 +4,8 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization") version "2.1.10"
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27"
+    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -44,13 +45,14 @@ android {
 }
 
 dependencies {
-    val fragment_version = "1.8.8"
-    val nav_version = "2.9.2"
-    val room_version = "2.7.2"
+    val fragmentVersion = "1.8.8"
+    val navVersion = "2.9.2"
+    val roomVersion = "2.7.2"
+    val hiltVersion = "2.57.1"
 
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -60,14 +62,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.fragment:fragment-ktx:$fragment_version")
-    implementation("androidx.navigation:navigation-fragment:${nav_version}")
-    implementation("androidx.navigation:navigation-ui:${nav_version}")
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+    implementation("androidx.navigation:navigation-fragment:${navVersion}")
+    implementation("androidx.navigation:navigation-ui:${navVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.google.dagger:hilt-android:$hiltVersion")
+    ksp("com.google.dagger:hilt-android-compiler:$hiltVersion")
 }

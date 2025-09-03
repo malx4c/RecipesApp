@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +18,8 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.malx4c.recipesapp.ui.IngredientsAdapter
 import com.malx4c.recipesapp.ui.MethodAdapter
 import com.malx4c.recipesapp.R
-import com.malx4c.recipesapp.RecipesApplication
 import com.malx4c.recipesapp.databinding.FragmentRecipeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
     SeekBar.OnSeekBarChangeListener {
@@ -34,21 +35,14 @@ class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
     override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 }
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
     private val args: RecipeFragmentArgs by navArgs()
-    private lateinit var recipeViewModel: RecipeViewModel
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("FragmentRecipeBinding is null")
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireActivity().application as RecipesApplication).appContainer
-        recipeViewModel = appContainer.recipeViewModelFactory.create()
-    }
-
+    private val recipeViewModel: RecipeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
